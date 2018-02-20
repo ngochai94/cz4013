@@ -1,0 +1,24 @@
+group 'cz4013'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task server(type:JavaExec) {
+    main = "cz4013.server.Main"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task client(type:JavaExec) {
+    main = "cz4013.client.Main"
+    classpath = sourceSets.main.runtimeClasspath
+}
