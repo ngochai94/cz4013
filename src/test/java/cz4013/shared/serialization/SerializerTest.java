@@ -27,7 +27,8 @@ public class SerializerTest {
         Optional.of(new Class1('a', false, Enum1.A)),
         Optional.empty(),
         Optional.of(new Class1('b', true, Enum1.B))
-      ))
+      )),
+      "asdf"
     );
     ByteBuffer b = Serializer.serialize(original, ByteBuffer.allocate(8192));
     Class2 deserialized = Deserializer.deserialize(Class2.class, b);
@@ -69,16 +70,18 @@ class Class2 {
   public long x;
   public short y;
   public int z;
+  public String s;
   public ArrayList<Optional<Class1>> class1;
 
   public Class2() {
   }
 
-  public Class2(long x, short y, int z, ArrayList<Optional<Class1>> class1) {
+  public Class2(long x, short y, int z, ArrayList<Optional<Class1>> class1, String s) {
     this.x = x;
     this.y = y;
     this.z = z;
     this.class1 = class1;
+    this.s = s;
   }
 
   @Override
