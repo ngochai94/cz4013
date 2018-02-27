@@ -9,4 +9,9 @@ public class OpenAccountResponse {
   public OpenAccountResponse(int accountNumber) {
     this.accountNumber = accountNumber;
   }
+
+  @Override
+  public String toString() {
+    return "OpenAccountResponse(" + accountNumber + ")";
+  }
 }

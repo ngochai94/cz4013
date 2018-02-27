@@ -11,4 +11,9 @@ public class CloseAccountResponse {
     this.success = success;
     this.errorMessage = errorMessage;
   }
+
+  @Override
+  public String toString() {
+    return "CloseAccountResponse(" + success + ", " + errorMessage + ")";
+  }
 }

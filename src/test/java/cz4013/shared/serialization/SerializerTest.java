@@ -90,9 +90,10 @@ class Class2 {
     if (!(o instanceof Class2)) return false;
     Class2 class2 = (Class2) o;
     return x == class2.x &&
-             y == class2.y &&
-             z == class2.z &&
-             Objects.equals(class1, class2.class1);
+      y == class2.y &&
+      z == class2.z &&
+      s.equals(class2.s) &&
+      Objects.equals(class1, class2.class1);
   }
 
   @Override
