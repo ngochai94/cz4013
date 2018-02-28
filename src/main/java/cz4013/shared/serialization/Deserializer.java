@@ -104,11 +104,8 @@ public class Deserializer {
       return buf.getDouble();
     }
 
-    if (ty == Optional.class) {
-    }
-
     if (ty == String.class) {
-      int len = buf.get();
+      int len = buf.getInt();
       byte[] utf8 = new byte[len];
       buf.get(utf8);
       return new String(utf8, StandardCharsets.UTF_8);
