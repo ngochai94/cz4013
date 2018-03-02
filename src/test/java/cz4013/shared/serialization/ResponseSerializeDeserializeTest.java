@@ -12,7 +12,7 @@ public class ResponseSerializeDeserializeTest {
   public void OpenAccountResponseTest() {
     OpenAccountResponse response = new OpenAccountResponse(123);
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
-    OpenAccountResponse deserialized = Deserializer.deserialize(OpenAccountResponse.class, b);
+    OpenAccountResponse deserialized = Deserializer.deserialize(new OpenAccountResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 
@@ -20,7 +20,7 @@ public class ResponseSerializeDeserializeTest {
   public void CloseAccountResponseTest() {
     CloseAccountResponse response = new CloseAccountResponse(true, "");
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
-    CloseAccountResponse deserialized = Deserializer.deserialize(CloseAccountResponse.class, b);
+    CloseAccountResponse deserialized = Deserializer.deserialize(new CloseAccountResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 
@@ -28,7 +28,7 @@ public class ResponseSerializeDeserializeTest {
   public void DepositResponseTest() {
     DepositResponse response = new DepositResponse(10, true, "");
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
-    DepositResponse deserialized = Deserializer.deserialize(DepositResponse.class, b);
+    DepositResponse deserialized = Deserializer.deserialize(new DepositResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 
@@ -36,7 +36,7 @@ public class ResponseSerializeDeserializeTest {
   public void MonitorStatusResponseTest() {
     MonitorStatusResponse response = new MonitorStatusResponse(true);
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
-    MonitorStatusResponse deserialized = Deserializer.deserialize(MonitorStatusResponse.class, b);
+    MonitorStatusResponse deserialized = Deserializer.deserialize(new MonitorStatusResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 
@@ -44,7 +44,7 @@ public class ResponseSerializeDeserializeTest {
   public void MonitorUpdateResponseTest() {
     MonitorUpdateResponse response = new MonitorUpdateResponse("asdf");
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
-    MonitorUpdateResponse deserialized = Deserializer.deserialize(MonitorUpdateResponse.class, b);
+    MonitorUpdateResponse deserialized = Deserializer.deserialize(new MonitorUpdateResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 }

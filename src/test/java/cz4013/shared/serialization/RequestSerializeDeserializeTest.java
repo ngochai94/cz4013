@@ -16,7 +16,7 @@ public class RequestSerializeDeserializeTest {
   public void OpenAccountRequestTest() {
     OpenAccountRequest request = new OpenAccountRequest("Alice", "123456", Currency.USD, 10);
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
-    OpenAccountRequest deserialized = Deserializer.deserialize(OpenAccountRequest.class, b);
+    OpenAccountRequest deserialized = Deserializer.deserialize(new OpenAccountRequest() {}, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 
@@ -24,7 +24,7 @@ public class RequestSerializeDeserializeTest {
   public void CloseAccountRequestTest() {
     CloseAccountRequest request = new CloseAccountRequest("Bob", 123, "789012");
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
-    CloseAccountRequest deserialized = Deserializer.deserialize(CloseAccountRequest.class, b);
+    CloseAccountRequest deserialized = Deserializer.deserialize(new CloseAccountRequest() {}, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 
@@ -32,7 +32,7 @@ public class RequestSerializeDeserializeTest {
   public void DepositRequestTest() {
     DepositRequest request = new DepositRequest("Bob", 123, "789012", Currency.USD, 10);
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
-    DepositRequest deserialized = Deserializer.deserialize(DepositRequest.class, b);
+    DepositRequest deserialized = Deserializer.deserialize(new DepositRequest() {}, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 
@@ -40,7 +40,7 @@ public class RequestSerializeDeserializeTest {
   public void MonitorRequestTest() {
     MonitorRequest request = new MonitorRequest(12);
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
-    MonitorRequest deserialized = Deserializer.deserialize(MonitorRequest.class, b);
+    MonitorRequest deserialized = Deserializer.deserialize(new MonitorRequest() {}, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 }
