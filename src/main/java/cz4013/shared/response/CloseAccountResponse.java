@@ -16,4 +16,8 @@ public class CloseAccountResponse {
   public String toString() {
     return "CloseAccountResponse(" + success + ", " + errorMessage + ")";
   }
+
+  public static CloseAccountResponse failed(String errorMessage) {
+    return new CloseAccountResponse(false, errorMessage);
+  }
 }

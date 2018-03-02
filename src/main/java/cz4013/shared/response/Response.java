@@ -13,5 +13,9 @@ public class Response<BodyType> {
     this.id = id;
     this.body = body;
   }
-}
 
+  @Override
+  public String toString() {
+    return "Response(" + id + ", " + body + ")";
+  }
+}

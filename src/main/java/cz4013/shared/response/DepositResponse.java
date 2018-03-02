@@ -18,4 +18,8 @@ public class DepositResponse {
   public String toString() {
     return "DepositResponse(" + balance + ", " + success + ", " + errorMessage + ")";
   }
+
+  public static DepositResponse failed(String errorMessage) {
+    return new DepositResponse(0, false, errorMessage);
+  }
 }
