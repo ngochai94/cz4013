@@ -13,5 +13,10 @@ public class Request<BodyType> {
     id = UUID.randomUUID();
     this.body = body;
   }
+
+  @Override
+  public String toString() {
+    return "Request(" + id + ", " + body + ")";
+  }
 }
 

@@ -24,7 +24,7 @@ public enum Currency {
   public static Stream<Currency> getAllCurrencies() {
     return Arrays.stream(Currency.values());
   }
-  
+
   public static String getAllCurrenciesString() {
     return String.join(", ", Currency.getAllCurrencies().map(Currency::toString).collect(Collectors.toList()));
   }
