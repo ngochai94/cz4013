@@ -33,13 +33,16 @@ public class Main {
   }
 
   private static int askUserChoice() {
-    System.out.print("Please choose a service by typing [1-2]:\n" +
+    System.out.print("\n----------------------------------------------------------------\n" +
+      "Please choose a service by typing [1-5]:\n" +
       "1: Open a new bank account\n" +
       "2: Close a bank account\n" +
+      "3: Deposit to a bank account\n" +
+      "4: Withdraw from a bank account\n" +
+      "5: Monitor update from other accounts\n" +
       "0: Stop the client\n" +
       "Your choice = ");
-    int choice = reader.nextInt();
-    reader.nextLine();
+    int choice = safeReadInt();
     if (choice < 0 || choice > 5) {
       System.out.println("Invalid choice!");
       return askUserChoice();
@@ -82,8 +85,7 @@ public class Main {
 
   private static void runMonitorService() {
     System.out.println("Monitor interval (s) = ");
-    double interval = reader.nextDouble();
-    reader.nextLine();
+    double interval = safeReadDouble();
   }
 
   private static String askName() {
@@ -103,8 +105,7 @@ public class Main {
 
   private static int askAccountNumber() {
     System.out.print("Your account number = ");
-    int accountNumber = reader.nextInt();
-    reader.nextLine();
+    int accountNumber = safeReadInt();
     return accountNumber;
   }
 
@@ -122,6 +123,24 @@ public class Main {
 
   private static Double askAmount() {
     System.out.print("Amount of money = ");
-    return reader.nextDouble();
+    return safeReadDouble();
+  }
+
+  private static int safeReadInt() {
+    try {
+      return Integer.parseInt(reader.nextLine());
+    } catch (NumberFormatException e) {
+      System.out.println("Please input an integer number!");
+      return safeReadInt();
+    }
+  }
+
+  private static double safeReadDouble() {
+    try {
+      return Double.parseDouble(reader.nextLine());
+    } catch (NumberFormatException e) {
+      System.out.println("Please input a number!");
+      return safeReadDouble();
+    }
   }
 }
