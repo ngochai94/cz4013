@@ -1,4 +1,4 @@
 **Run**
 - Server `./gradlew server`
-- Client `./gradlew client`
+- Client `TERM=dumb ./gradlew -q client`
 - Test `./gradlew test`

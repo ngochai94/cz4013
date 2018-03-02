@@ -2,6 +2,8 @@ package cz4013.shared.serialization;
 
 import cz4013.shared.currency.Currency;
 import cz4013.shared.request.CloseAccountRequest;
+import cz4013.shared.request.DepositRequest;
+import cz4013.shared.request.MonitorRequest;
 import cz4013.shared.request.OpenAccountRequest;
 import org.junit.Test;
 
@@ -20,9 +22,25 @@ public class RequestSerializeDeserializeTest {
 
   @Test
   public void CloseAccountRequestTest() {
-    CloseAccountRequest request = new CloseAccountRequest(123, "Bob", "789012");
+    CloseAccountRequest request = new CloseAccountRequest("Bob", 123, "789012");
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
     CloseAccountRequest deserialized = Deserializer.deserialize(CloseAccountRequest.class, b);
+    assertEquals(request.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void DepositRequestTest() {
+    DepositRequest request = new DepositRequest("Bob", 123, "789012", Currency.USD, 10);
+    ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
+    DepositRequest deserialized = Deserializer.deserialize(DepositRequest.class, b);
+    assertEquals(request.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void MonitorRequestTest() {
+    MonitorRequest request = new MonitorRequest(12);
+    ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
+    MonitorRequest deserialized = Deserializer.deserialize(MonitorRequest.class, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 }

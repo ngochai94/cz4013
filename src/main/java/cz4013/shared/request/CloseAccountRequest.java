@@ -1,21 +1,21 @@
 package cz4013.shared.request;
 
 public class CloseAccountRequest {
-  public int accountNumber;
   public String name;
+  public int accountNumber;
   public String password;
 
   public CloseAccountRequest() {
   }
 
-  public CloseAccountRequest(int accountNumber, String name, String password) {
-    this.accountNumber = accountNumber;
+  public CloseAccountRequest(String name, int accountNumber, String password) {
     this.name = name;
+    this.accountNumber = accountNumber;
     this.password = password;
   }
 
   @Override
   public String toString() {
-    return "CloseAccountRequest(" + accountNumber + ", " + name + ", " + password + ")";
+    return "CloseAccountRequest(" + name + ", " + accountNumber + ", " + password + ")";
   }
 }
