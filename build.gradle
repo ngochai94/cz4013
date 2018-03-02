@@ -14,11 +14,13 @@ dependencies {
 }
 
 task server(type:JavaExec) {
+    standardInput = System.in
     main = "cz4013.server.Main"
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task client(type:JavaExec) {
+    standardInput = System.in
     main = "cz4013.client.Main"
     classpath = sourceSets.main.runtimeClasspath
 }
