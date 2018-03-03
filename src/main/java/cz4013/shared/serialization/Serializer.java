@@ -10,14 +10,13 @@ import static cz4013.shared.serialization.Utils.serializableFields;
 
 /**
  * Serializes an object.
- * <p>
+ *
  * An object is serialized field-by-field, in the order declared in the object's class definition.
- * <p>
- * For auto serialization to work:
- * - All fields must have a concrete class type (ex, `List<Integer>` won't work,
- * use `ArrayList<Integer>` and friends instead);
- * - The object's class must not be generic.
- * <p>
+ *
+ * For auto (de)serialization to work, all fields must have a concrete class type
+ * (ex, `List<Integer>` won't work, use `ArrayList<Integer>` and concrete implementations of
+ * `List<T>` instead).
+ *
  * A field is serialized in different ways, depending on its type:
  * - If the field is a `Serializable` , its `serialize` method is called;
  * - If the field is of one of the 8 primitive types (boolean, byte, short, int, long, char, float,
@@ -65,7 +64,7 @@ public class Serializer {
             write(field.get(obj), buf);
           } catch (IllegalAccessException e) {
             assert false : "Field " + field.getName() + " of " + obj.getClass().getName()
-                             + " is not accessible.";
+              + " is not accessible.";
           }
         });
     }
