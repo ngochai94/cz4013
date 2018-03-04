@@ -4,6 +4,7 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.UUID;
 
 import static cz4013.shared.serialization.Utils.resetBuffer;
 import static cz4013.shared.serialization.Utils.serializableFields;
@@ -101,6 +102,8 @@ public class Serializer {
       write(((Optional) x), buf);
     } else if (x instanceof Iterable<?>) {
       write(((Iterable<?>) x), buf);
+    } else if (x instanceof UUID) {
+      write((UUID) x, buf);
     } else {
       writeStruct(x, buf);
     }
@@ -126,5 +129,10 @@ public class Serializer {
     // Fix length.
     int len = buf.position() - i - 4; // Subtract 4 to exclude the placeholder.
     buf.putInt(i, len);
+  }
+
+  public static void write(UUID x, ByteBuffer buf) {
+    buf.putLong(x.getMostSignificantBits());
+    buf.putLong(x.getLeastSignificantBits());
   }
 }
