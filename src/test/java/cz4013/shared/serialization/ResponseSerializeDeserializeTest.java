@@ -1,5 +1,6 @@
 package cz4013.shared.serialization;
 
+import cz4013.shared.currency.Currency;
 import cz4013.shared.response.*;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class ResponseSerializeDeserializeTest {
 
   @Test
   public void DepositResponseTest() {
-    DepositResponse response = new DepositResponse(10, true, "");
+    DepositResponse response = new DepositResponse(Currency.USD, 10, true, "");
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
     DepositResponse deserialized = Deserializer.deserialize(new DepositResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
@@ -45,6 +46,22 @@ public class ResponseSerializeDeserializeTest {
     MonitorUpdateResponse response = new MonitorUpdateResponse("asdf");
     ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
     MonitorUpdateResponse deserialized = Deserializer.deserialize(new MonitorUpdateResponse() {}, b);
+    assertEquals(response.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void QueryResponseTest() {
+    QueryResponse response = new QueryResponse("asdf", Currency.USD, 1.2, true, "");
+    ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
+    QueryResponse deserialized = Deserializer.deserialize(new QueryResponse() {}, b);
+    assertEquals(response.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void PayMaintenanceResponseTest() {
+    PayMaintenanceFeeResponse response = new PayMaintenanceFeeResponse(Currency.USD, 1.2, true, "");
+    ByteBuffer b = Serializer.serialize(response, ByteBuffer.allocate(8192));
+    PayMaintenanceFeeResponse deserialized = Deserializer.deserialize(new PayMaintenanceFeeResponse() {}, b);
     assertEquals(response.toString(), deserialized.toString());
   }
 }

@@ -2,10 +2,7 @@ package cz4013.server;
 
 import cz4013.server.rpc.Router;
 import cz4013.server.service.BankService;
-import cz4013.shared.request.CloseAccountRequest;
-import cz4013.shared.request.DepositRequest;
-import cz4013.shared.request.MonitorRequest;
-import cz4013.shared.request.OpenAccountRequest;
+import cz4013.shared.request.*;
 
 public class Main {
   public static void main(String[] args) {
@@ -14,7 +11,9 @@ public class Main {
       .bind("openAccount", svc::processOpenAccount, new OpenAccountRequest() {})
       .bind("closeAccount", svc::processCloseAccount, new CloseAccountRequest() {})
       .bind("deposit", svc::processDeposit, new DepositRequest() {})
-      .bind("monitor", svc::processMonitor, new MonitorRequest() {});
+      .bind("monitor", svc::processMonitor, new MonitorRequest() {})
+      .bind("query", svc::processQuery, new QueryRequest() {})
+      .bind("payMaintenanceFee", svc::processPayMaintenanceFee, new PayMaintenanceFeeRequest() {});
     System.out.print("Hello from server");
   }
 }

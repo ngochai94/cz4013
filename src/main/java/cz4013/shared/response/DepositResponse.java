@@ -1,6 +1,9 @@
 package cz4013.shared.response;
 
+import cz4013.shared.currency.Currency;
+
 public class DepositResponse {
+  public Currency currency;
   public double balance;
   public boolean success;
   public String errorMessage;
@@ -8,7 +11,8 @@ public class DepositResponse {
   public DepositResponse() {
   }
 
-  public DepositResponse(double balance, boolean success, String errorMessage) {
+  public DepositResponse(Currency currency, double balance, boolean success, String errorMessage) {
+    this.currency = currency;
     this.balance = balance;
     this.success = success;
     this.errorMessage = errorMessage;
@@ -16,10 +20,10 @@ public class DepositResponse {
 
   @Override
   public String toString() {
-    return "DepositResponse(" + balance + ", " + success + ", " + errorMessage + ")";
+    return "DepositResponse(" + currency + ", " + balance + ", " + success + ", " + errorMessage + ")";
   }
 
   public static DepositResponse failed(String errorMessage) {
-    return new DepositResponse(0, false, errorMessage);
+    return new DepositResponse(Currency.USD, 0, false, errorMessage);
   }
 }
