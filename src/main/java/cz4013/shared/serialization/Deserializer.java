@@ -10,10 +10,7 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static cz4013.shared.serialization.Utils.serializableFields;
 
@@ -23,8 +20,10 @@ public class Deserializer {
   /**
    * Deserializes an object from a buffer.
    *
-   * If the object is an instance of a generic class, it must be created with anonymous
-   * class syntax due to type erasure. For example:
+   * Note that to support both generic and non-generic classes,
+   * the given object must be created with anonymous class syntax due to type erasure.
+   *
+   * For example:
    * ```
    * class Clazz<T> {}
    *
@@ -46,7 +45,9 @@ public class Deserializer {
     buf.order(ByteOrder.LITTLE_ENDIAN);
     buf.clear();
     try {
-      return (T) readStruct(obj.getClass().getGenericSuperclass(), buf, EMPTY_TYPE_MAP);
+      Class<?> clazz = obj.getClass();
+      assert clazz.isAnonymousClass() : "The given object must be created with anonymous class syntax.";
+      return (T) readStruct(clazz.getGenericSuperclass(), buf, EMPTY_TYPE_MAP);
     } catch (BufferOverflowException e) {
       throw new SerializingException("Corrupted data", e);
     }
@@ -139,6 +140,10 @@ public class Deserializer {
       byte[] utf8 = new byte[len];
       buf.get(utf8);
       return new String(utf8, StandardCharsets.UTF_8);
+    }
+
+    if (ty == UUID.class) {
+      return new UUID(buf.getLong(), buf.getLong());
     }
 
     if (ParameterizedType.class.isAssignableFrom(ty.getClass())) {

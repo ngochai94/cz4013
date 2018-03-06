@@ -5,74 +5,73 @@ import cz4013.server.storage.Database;
 import cz4013.shared.request.*;
 import cz4013.shared.response.*;
 
+import java.net.SocketAddress;
+
 public class BankService {
   private Database db = new Database();
   private int nextAvailableAccountNumber = 1;
 
-  public Response<OpenAccountResponse> processOpenAccount(Request<OpenAccountRequest> request) {
-    OpenAccountRequest openAccountRequest = request.body;
+  public OpenAccountResponse processOpenAccount(OpenAccountRequest req) {
     int accountNumber = nextAvailableAccountNumber++;
     db.store(
       accountNumber,
       new AccountDetail(
-        openAccountRequest.name,
-        openAccountRequest.password,
-        openAccountRequest.currency,
-        openAccountRequest.balance
+        req.name,
+        req.password,
+        req.currency,
+        req.balance
       )
     );
-    return new Response<>(request.id, new OpenAccountResponse(accountNumber));
+    return new OpenAccountResponse(accountNumber);
   }
 
-  public Response<CloseAccountResponse> processCloseAccount(Request<CloseAccountRequest> request) {
-    CloseAccountRequest closeAccountRequest = request.body;
-    AccountDetail accountDetail = db.query(closeAccountRequest.accountNumber);
+  public CloseAccountResponse processCloseAccount(CloseAccountRequest req) {
+    AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
-      return new Response<>(request.id, CloseAccountResponse.failed("This account number doesn't exist"));
+      return CloseAccountResponse.failed("This account number doesn't exist");
     }
-    if (!accountDetail.name.equals(closeAccountRequest.name)) {
-      return new Response<>(request.id, CloseAccountResponse.failed("The account number is not under this name"));
+    if (!accountDetail.name.equals(req.name)) {
+      return CloseAccountResponse.failed("The account number is not under this name");
     }
-    if (!accountDetail.password.equals(closeAccountRequest.password)) {
-      return new Response<>(request.id, CloseAccountResponse.failed("Wrong password"));
+    if (!accountDetail.password.equals(req.password)) {
+      return CloseAccountResponse.failed("Wrong password");
     }
-    db.delete(closeAccountRequest.accountNumber);
-    return new Response<>(request.id, new CloseAccountResponse(true, ""));
+    db.delete(req.accountNumber);
+    return new CloseAccountResponse(true, "");
   }
 
-  public Response<DepositResponse> processDeposit(Request<DepositRequest> request) {
-    DepositRequest depositRequest = request.body;
-    AccountDetail accountDetail = db.query(depositRequest.accountNumber);
+  public DepositResponse processDeposit(DepositRequest req) {
+    AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
-      return new Response<>(request.id, DepositResponse.failed("This account number doesn't exist"));
+      return DepositResponse.failed("This account number doesn't exist");
     }
-    if (!accountDetail.name.equals(depositRequest.name)) {
-      return new Response<>(request.id, DepositResponse.failed("The account number is not under this name"));
+    if (!accountDetail.name.equals(req.name)) {
+      return DepositResponse.failed("The account number is not under this name");
     }
-    if (!accountDetail.password.equals(depositRequest.password)) {
-      return new Response<>(request.id, DepositResponse.failed("Wrong password"));
+    if (!accountDetail.password.equals(req.password)) {
+      return DepositResponse.failed("Wrong password");
     }
-    if (accountDetail.currency != depositRequest.currency) {
-      return new Response<>(request.id, DepositResponse.failed("The currency doesn't match"));
+    if (accountDetail.currency != req.currency) {
+      return DepositResponse.failed("The currency doesn't match");
     }
-    if (accountDetail.amount + depositRequest.amount < 0) {
-      return new Response<>(request.id, DepositResponse.failed("There's not enough balance to withdraw"));
+    if (accountDetail.amount + req.amount < 0) {
+      return DepositResponse.failed("There's not enough balance to withdraw");
     }
     db.store(
-      depositRequest.accountNumber,
+      req.accountNumber,
       new AccountDetail(
         accountDetail.name,
         accountDetail.password,
         accountDetail.currency,
-        accountDetail.amount + depositRequest.amount
+        accountDetail.amount + req.amount
       )
     );
-    return new Response<>(request.id, new DepositResponse(accountDetail.amount + depositRequest.amount, true, ""));
+    return new DepositResponse(accountDetail.amount + req.amount, true, "");
   }
 
-  public Response<MonitorStatusResponse> processMonitor(Request<MonitorRequest> request) {
-    double interval = request.body.interval;
+  public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {
+    double interval = req.interval;
     // TODO: store client's address
-    return new Response<>(request.id, new MonitorStatusResponse(true));
+    return new MonitorStatusResponse(true);
   }
 }
