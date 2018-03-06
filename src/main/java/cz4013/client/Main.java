@@ -24,6 +24,10 @@ public class Main {
           break;
         case 5: runMonitorService();
           break;
+        case 6: runQueryService();
+          break;
+        case 7: runMaintenanceService();
+          break;
         default: shouldStop = true;
           break;
       }
@@ -40,10 +44,12 @@ public class Main {
       "3: Deposit to a bank account\n" +
       "4: Withdraw from a bank account\n" +
       "5: Monitor update from other accounts\n" +
+      "6: Query information from a bank account\n" +
+      "7: Pay maintenance fee from a bank account\n" +
       "0: Stop the client\n" +
       "Your choice = ");
     int choice = safeReadInt();
-    if (choice < 0 || choice > 5) {
+    if (choice < 0 || choice > 7) {
       System.out.println("Invalid choice!");
       return askUserChoice();
     }
@@ -51,7 +57,7 @@ public class Main {
   }
 
   private static void runOpenAccountService() {
-    System.out.println("Please input the following information");
+    System.out.println("Please input the following information to open an account");
     String name = askName();
     String password = askPassword();
     Currency currency = askCurrency();
@@ -59,14 +65,14 @@ public class Main {
   }
 
   private static void runCloseAccountService() {
-    System.out.println("Please input the following information");
+    System.out.println("Please input the following information to close an account");
     String name = askName();
     int accountNumber = askAccountNumber();
     String password = askPassword();
   }
 
   private static void runDepositService() {
-    System.out.println("Please input the following information");
+    System.out.println("Please input the following information to deposit to an account");
     String name = askName();
     int accountNumber = askAccountNumber();
     String password = askPassword();
@@ -75,7 +81,7 @@ public class Main {
   }
 
   private static void runWithdrawService() {
-    System.out.println("Please input the following information");
+    System.out.println("Please input the following information to withdraw from an account");
     String name = askName();
     int accountNumber = askAccountNumber();
     String password = askPassword();
@@ -86,6 +92,19 @@ public class Main {
   private static void runMonitorService() {
     System.out.println("Monitor interval (s) = ");
     double interval = safeReadDouble();
+  }
+
+  private static void runQueryService() {
+    System.out.println("Please input the following information to query from an account");
+    int accountNumber = askAccountNumber();
+    String password = askPassword();
+  }
+
+  private static void runMaintenanceService() {
+    System.out.println("Please input the following information to pay the maintenance fee");
+    String name = askName();
+    int accountNumber = askAccountNumber();
+    String password = askPassword();
   }
 
   private static String askName() {

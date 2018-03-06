@@ -66,12 +66,39 @@ public class BankService {
         accountDetail.amount + req.amount
       )
     );
-    return new DepositResponse(accountDetail.amount + req.amount, true, "");
+    accountDetail = db.query(req.accountNumber);
+    return new DepositResponse(accountDetail.currency, accountDetail.amount, true, "");
   }
 
   public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {
     double interval = req.interval;
     // TODO: store client's address
     return new MonitorStatusResponse(true);
+  }
+
+  public QueryResponse processQuery(QueryRequest req) {
+    AccountDetail accountDetail = db.query(req.accountNumber);
+    if (accountDetail == null) {
+      return QueryResponse.failed("This account number doesn't exist");
+    }
+    return new QueryResponse(accountDetail.name, accountDetail.currency, accountDetail.amount, true, "");
+  }
+
+  public PayMaintenanceFeeResponse processPayMaintenanceFee(PayMaintenanceFeeRequest req) {
+    AccountDetail accountDetail = db.query(req.accountNumber);
+    if (accountDetail == null) {
+      return PayMaintenanceFeeResponse.failed("This account number doesn't exist");
+    }
+    db.store(
+      req.accountNumber,
+      new AccountDetail(
+        accountDetail.name,
+        accountDetail.password,
+        accountDetail.currency,
+        accountDetail.amount * 0.99
+      )
+    );
+    accountDetail = db.query(req.accountNumber);
+    return new PayMaintenanceFeeResponse(accountDetail.currency, accountDetail.amount, true, "");
   }
 }

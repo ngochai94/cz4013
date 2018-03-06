@@ -1,10 +1,7 @@
 package cz4013.shared.serialization;
 
 import cz4013.shared.currency.Currency;
-import cz4013.shared.request.CloseAccountRequest;
-import cz4013.shared.request.DepositRequest;
-import cz4013.shared.request.MonitorRequest;
-import cz4013.shared.request.OpenAccountRequest;
+import cz4013.shared.request.*;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -41,6 +38,22 @@ public class RequestSerializeDeserializeTest {
     MonitorRequest request = new MonitorRequest(12);
     ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
     MonitorRequest deserialized = Deserializer.deserialize(new MonitorRequest() {}, b);
+    assertEquals(request.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void QueryRequestTest() {
+    QueryRequest request = new QueryRequest(1, "asdf");
+    ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
+    QueryRequest deserialized = Deserializer.deserialize(new QueryRequest() {}, b);
+    assertEquals(request.toString(), deserialized.toString());
+  }
+
+  @Test
+  public void PayMaintenanceFeeRequestTest() {
+    PayMaintenanceFeeRequest request = new PayMaintenanceFeeRequest(1, "asdf", "qwer");
+    ByteBuffer b = Serializer.serialize(request, ByteBuffer.allocate(8192));
+    PayMaintenanceFeeRequest deserialized = Deserializer.deserialize(new PayMaintenanceFeeRequest() {}, b);
     assertEquals(request.toString(), deserialized.toString());
   }
 }
