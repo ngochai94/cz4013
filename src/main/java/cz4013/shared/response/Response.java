@@ -8,6 +8,9 @@ public class Response<RespBody> {
   public Header header;
   public Optional<RespBody> body;
 
+  public Response() {
+  }
+
   public Response(Header header, Optional<RespBody> body) {
     this.header = header;
     this.body = body;
