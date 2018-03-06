@@ -20,6 +20,6 @@ public class Header {
     if (!(o instanceof Header)) return false;
     Header header = (Header) o;
     return Objects.equals(uuid, header.uuid) &&
-             Objects.equals(method, header.method);
+      Objects.equals(method, header.method);
   }
 }
