@@ -2,14 +2,14 @@ package cz4013.shared.request;
 
 import java.util.Objects;
 
-public class Request<Body> {
+public class Request<ResBody> {
   public Header header;
-  public Body body;
+  public ResBody body;
 
   public Request() {
   }
 
-  public Request(Header header, Body body) {
+  public Request(Header header, ResBody body) {
     this.header = header;
     this.body = body;
   }

@@ -4,11 +4,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Response<Body> {
+public class Response<RespBody> {
   public Header header;
-  public Optional<Body> body;
+  public Optional<RespBody> body;
 
-  public Response(Header header, Optional<Body> body) {
+  public Response(Header header, Optional<RespBody> body) {
     this.header = header;
     this.body = body;
   }
