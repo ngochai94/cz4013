@@ -27,23 +27,23 @@ public class Router {
   public <ReqBody, RespBody> Router bind(
     String method,
     Function<ReqBody, RespBody> handler,
-    ReqBody reqBody
+    Object reqBody
   ) {
     routes.put(method, new Route(
       reqBody,
-      (req, remote) -> handler.apply((ReqBody) req)
+      (req, remote) -> ((Function<Object, Object>)handler).apply(req)
     ));
     return this;
   }
 
-  public <ReqBody, RespBody> Router bind(
+  public <ReqBody, RespBody, B extends ReqBody> Router bind(
     String method,
     BiFunction<ReqBody, SocketAddress, RespBody> handler,
-    ReqBody reqBody
+    Object reqBody
   ) {
     routes.put(method, new Route(
       reqBody,
-      (req, remote) -> handler.apply((ReqBody) req, remote)
+      (req, remote) -> ((BiFunction<Object, SocketAddress, Object>) handler).apply(req, remote)
     ));
     return this;
   }
