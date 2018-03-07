@@ -36,6 +36,8 @@ public class Main {
     for (; ; ) {
       try (RawMessage req = server.recv()) {
         Response<?> resp = r.route(req);
+        System.out.println(resp.header);
+        System.out.println(resp.body);
         server.send(req.remote, resp);
       } catch (Exception e) {
         e.printStackTrace();

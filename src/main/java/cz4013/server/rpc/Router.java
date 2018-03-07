@@ -1,7 +1,7 @@
 package cz4013.server.rpc;
 
 import cz4013.shared.container.LruCache;
-import cz4013.shared.request.Header;
+import cz4013.shared.request.RequestHeader;
 import cz4013.shared.response.Response;
 import cz4013.shared.response.Status;
 import cz4013.shared.rpc.RawMessage;
@@ -48,7 +48,7 @@ public class Router {
     return this;
   }
 
-  private Response<?> routeUncached(RawMessage req, Header header) {
+  private Response<?> routeUncached(RawMessage req, RequestHeader header) {
     try {
       Route route = routes.get(header.method);
       if (route == null) {
@@ -68,7 +68,7 @@ public class Router {
   }
 
   public Response<?> route(RawMessage req) {
-    Header header = deserialize(new Header() {}, req.payload.get());
+    RequestHeader header = deserialize(new RequestHeader() {}, req.payload.get());
     return cache.get(header.uuid).orElseGet(() -> {
       Response<?> resp = routeUncached(req, header);
       cache.put(header.uuid, resp);

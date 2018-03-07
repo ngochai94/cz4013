@@ -12,6 +12,7 @@ public class BankService {
   private int nextAvailableAccountNumber = 1;
 
   public OpenAccountResponse processOpenAccount(OpenAccountRequest req) {
+    System.out.println("Opening bank account");
     int accountNumber = nextAvailableAccountNumber++;
     db.store(
       accountNumber,
