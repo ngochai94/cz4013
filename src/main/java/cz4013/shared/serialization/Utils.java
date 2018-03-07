@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 class Utils {
   static Stream<Field> serializableFields(Class<?> clazz) {
     return Arrays.stream(clazz.getFields())
-             .filter(field -> {
-               int modifiers = field.getModifiers();
-               return Modifier.isPublic(modifiers) && !Modifier.isTransient(modifiers) && !Modifier.isStatic(modifiers);
-             });
+      .filter(field -> {
+        int modifiers = field.getModifiers();
+        return Modifier.isPublic(modifiers) && !Modifier.isTransient(modifiers) && !Modifier.isStatic(modifiers);
+      });
   }
 
   static void resetBuffer(ByteBuffer buf) {

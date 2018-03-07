@@ -18,6 +18,6 @@ public class Header {
     if (!(o instanceof Header)) return false;
     Header header = (Header) o;
     return Objects.equals(uuid, header.uuid) &&
-             status == header.status;
+      status == header.status;
   }
 }

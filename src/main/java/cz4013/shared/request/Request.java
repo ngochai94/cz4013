@@ -20,7 +20,7 @@ public class Request<ReqBody> {
     if (!(o instanceof Request)) return false;
     Request<?> request = (Request<?>) o;
     return Objects.equals(header, request.header) &&
-             Objects.equals(body, request.body);
+      Objects.equals(body, request.body);
   }
 }
 
