@@ -3,7 +3,7 @@ package cz4013.server.rpc;
 import cz4013.shared.container.BufferPool;
 import cz4013.shared.container.LruCache;
 import cz4013.shared.container.PooledByteBuffer;
-import cz4013.shared.request.Header;
+import cz4013.shared.request.RequestHeader;
 import cz4013.shared.request.Request;
 import cz4013.shared.response.Response;
 import cz4013.shared.response.Status;
@@ -28,7 +28,7 @@ public class RouterTest {
     BufferPool pool = new BufferPool(8192, 1);
 
     Request<Wrapper> req = new Request<>(
-      new Header(UUID.randomUUID(), method),
+      new RequestHeader(UUID.randomUUID(), method),
       new Wrapper("request body")
     );
 
@@ -46,7 +46,7 @@ public class RouterTest {
   public void testNotFound() {
     Router r = new Router(new LruCache<>(0));
     Request<Wrapper> req = new Request<>(
-      new Header(UUID.randomUUID(), "notfound"),
+      new RequestHeader(UUID.randomUUID(), "notfound"),
       new Wrapper("")
     );
     BufferPool pool = new BufferPool(8192, 1);
@@ -70,7 +70,7 @@ public class RouterTest {
     BufferPool pool = new BufferPool(8192, 1);
 
     Request<Wrapper> req = new Request<>(
-      new Header(UUID.randomUUID(), method),
+      new RequestHeader(UUID.randomUUID(), method),
       new Wrapper("request body")
     );
 

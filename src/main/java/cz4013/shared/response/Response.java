@@ -5,13 +5,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Response<RespBody> {
-  public Header header;
+  public ResponseHeader header;
   public Optional<RespBody> body;
 
   public Response() {
   }
 
-  public Response(Header header, Optional<RespBody> body) {
+  public Response(ResponseHeader header, Optional<RespBody> body) {
     this.header = header;
     this.body = body;
   }
@@ -19,13 +19,13 @@ public class Response<RespBody> {
   public static Response<Object> failed(UUID uuid, Status status) {
     assert status != Status.OK;
     return new Response<>(
-      new Header(uuid, status),
+      new ResponseHeader(uuid, status),
       Optional.empty()
     );
   }
 
   public static <T> Response<T> ok(UUID uuid, T body) {
-    return new Response<>(new Header(uuid, Status.OK), Optional.of(body));
+    return new Response<>(new ResponseHeader(uuid, Status.OK), Optional.of(body));
   }
 
   @Override

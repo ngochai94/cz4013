@@ -1,38 +1,53 @@
 package cz4013.client;
 
-import cz4013.shared.currency.Currency;
+import cz4013.shared.container.BufferPool;
+import cz4013.shared.rpc.Transport;
 
-import java.util.Optional;
-import java.util.Scanner;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.util.Map;
 
 public class Main {
-  private static int PASSWORD_LENGTH = 6;
-  private static Scanner reader = new Scanner(System.in);
+  private static Transport client;
+  private static SocketAddress serverAddress;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SocketException {
+    Map<String, String> env = System.getenv();
+    String clientHost = env.getOrDefault("CLIENT_HOST", "127.0.0.1");
+    String serverHost = env.getOrDefault("SERVER_HOST", "127.0.0.1");
+    int clientPort = Integer.parseInt(env.getOrDefault("CLIENT_PORT", "12741"));
+    int serverPort = Integer.parseInt(env.getOrDefault("SERVER_PORT", "12740"));
+    BufferPool pool = new BufferPool(8192, 1024);
+    client = new Transport(new DatagramSocket(new InetSocketAddress(clientHost, clientPort)), pool);
+    serverAddress = new InetSocketAddress(serverHost, serverPort);
+
+    BankClient bankClient = new BankClient(client, serverAddress);
+
     boolean shouldStop = false;
     while (!shouldStop) {
       int userChoice = askUserChoice();
       switch (userChoice) {
-        case 1: runOpenAccountService();
+        case 1: bankClient.runOpenAccountService();
           break;
-        case 2: runCloseAccountService();
+        case 2: bankClient.runCloseAccountService();
           break;
-        case 3: runDepositService();
+        case 3: bankClient.runDepositService();
           break;
-        case 4: runWithdrawService();
+        case 4: bankClient.runWithdrawService();
           break;
-        case 5: runMonitorService();
+        case 5: bankClient.runMonitorService();
           break;
-        case 6: runQueryService();
+        case 6: bankClient.runQueryService();
           break;
-        case 7: runMaintenanceService();
+        case 7: bankClient.runMaintenanceService();
           break;
         default: shouldStop = true;
           break;
       }
     }
-    reader.close();
+    Util.closeReader();
     System.out.println("Stopping client...");
   }
 
@@ -48,118 +63,11 @@ public class Main {
       "7: Pay maintenance fee from a bank account\n" +
       "0: Stop the client\n" +
       "Your choice = ");
-    int choice = safeReadInt();
+    int choice = Util.safeReadInt();
     if (choice < 0 || choice > 7) {
       System.out.println("Invalid choice!");
       return askUserChoice();
     }
     return choice;
-  }
-
-  private static void runOpenAccountService() {
-    System.out.println("Please input the following information to open an account");
-    String name = askName();
-    String password = askPassword();
-    Currency currency = askCurrency();
-    Double balance = askAmount();
-  }
-
-  private static void runCloseAccountService() {
-    System.out.println("Please input the following information to close an account");
-    String name = askName();
-    int accountNumber = askAccountNumber();
-    String password = askPassword();
-  }
-
-  private static void runDepositService() {
-    System.out.println("Please input the following information to deposit to an account");
-    String name = askName();
-    int accountNumber = askAccountNumber();
-    String password = askPassword();
-    Currency currency = askCurrency();
-    Double amount = askAmount();
-  }
-
-  private static void runWithdrawService() {
-    System.out.println("Please input the following information to withdraw from an account");
-    String name = askName();
-    int accountNumber = askAccountNumber();
-    String password = askPassword();
-    Currency currency = askCurrency();
-    Double amount = askAmount();
-  }
-
-  private static void runMonitorService() {
-    System.out.println("Monitor interval (s) = ");
-    double interval = safeReadDouble();
-  }
-
-  private static void runQueryService() {
-    System.out.println("Please input the following information to query from an account");
-    int accountNumber = askAccountNumber();
-    String password = askPassword();
-  }
-
-  private static void runMaintenanceService() {
-    System.out.println("Please input the following information to pay the maintenance fee");
-    String name = askName();
-    int accountNumber = askAccountNumber();
-    String password = askPassword();
-  }
-
-  private static String askName() {
-    System.out.print("Your name = ");
-    return reader.nextLine();
-  }
-
-  private static String askPassword() {
-    System.out.printf("Your password (%d characters) = ", PASSWORD_LENGTH);
-    String password = reader.nextLine();
-    if (password.length() != PASSWORD_LENGTH) {
-      System.out.printf("Password must have exactly %d characters!\n", PASSWORD_LENGTH);
-      return askPassword();
-    }
-    return password;
-  }
-
-  private static int askAccountNumber() {
-    System.out.print("Your account number = ");
-    int accountNumber = safeReadInt();
-    return accountNumber;
-  }
-
-  private static Currency askCurrency() {
-    System.out.printf("Your currency choice (%s) = ", Currency.getAllCurrenciesString());
-    String currency = reader.nextLine().toUpperCase();
-    Optional<Currency> currencyOpt = Currency.getAllCurrencies().filter(x -> x.toString().equals(currency)).findFirst();
-    if (currencyOpt.isPresent()) {
-      return currencyOpt.get();
-    } else {
-      System.out.println("Invalid currency code!");
-      return askCurrency();
-    }
-  }
-
-  private static Double askAmount() {
-    System.out.print("Amount of money = ");
-    return safeReadDouble();
-  }
-
-  private static int safeReadInt() {
-    try {
-      return Integer.parseInt(reader.nextLine());
-    } catch (NumberFormatException e) {
-      System.out.println("Please input an integer number!");
-      return safeReadInt();
-    }
-  }
-
-  private static double safeReadDouble() {
-    try {
-      return Double.parseDouble(reader.nextLine());
-    } catch (NumberFormatException e) {
-      System.out.println("Please input a number!");
-      return safeReadDouble();
-    }
   }
 }

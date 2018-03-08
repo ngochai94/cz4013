@@ -3,13 +3,13 @@ package cz4013.shared.request;
 import java.util.Objects;
 
 public class Request<ReqBody> {
-  public Header header;
+  public RequestHeader header;
   public ReqBody body;
 
   public Request() {
   }
 
-  public Request(Header header, ReqBody body) {
+  public Request(RequestHeader header, ReqBody body) {
     this.header = header;
     this.body = body;
   }
