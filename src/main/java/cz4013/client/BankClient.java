@@ -243,7 +243,11 @@ public class BankClient {
 
   private Double askAmount() {
     System.out.print("Amount of money = ");
-    return Util.safeReadDouble();
+    double amount = Util.safeReadDouble();
+    if (amount < 0) {
+      System.out.println("Amount cannot be negative!");
+      return askAmount();
+    }
+    return amount;
   }
-
 }
