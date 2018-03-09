@@ -1,12 +1,12 @@
 package cz4013.shared.request;
 
 public class MonitorRequest {
-  public double interval;
+  public int interval;
 
   public MonitorRequest() {
   }
 
-  public MonitorRequest(double interval) {
+  public MonitorRequest(int interval) {
     this.interval = interval;
   }
 
