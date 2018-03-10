@@ -20,6 +20,7 @@ public class Main {
     String host = env.getOrDefault("HOST", "127.0.0.1");
     int port = Integer.parseInt(env.getOrDefault("PORT", "12740"));
     boolean atMostOnce = Integer.parseInt(env.getOrDefault("AT_MOST_ONCE", "0")) != 0;
+    double packetLossRate = Double.parseDouble(env.getOrDefault("PACKET_LOSS_RATE", "0.0"));
 
     BufferPool pool = new BufferPool(8192, 1024);
     Transport server = new Transport(new DatagramSocket(new InetSocketAddress(host, port)), pool);
@@ -36,8 +37,16 @@ public class Main {
 
     for (; ; ) {
       try (RawMessage req = server.recv()) {
+        if (Math.random() < packetLossRate) {
+          System.out.printf("Dropped a request from %s.", req.remote);
+          continue;
+        }
         Response<?> resp = r.route(req);
-        server.send(req.remote, resp);
+        if (Math.random() < packetLossRate) {
+          System.out.printf("Dropped a response to %s.", req.remote);
+        } else {
+          server.send(req.remote, resp);
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }
