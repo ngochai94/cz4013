@@ -10,6 +10,7 @@ import cz4013.shared.serialization.Deserializer;
 import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.*;
 
 public class BankClient {
   private static int PASSWORD_LENGTH = 6;
@@ -131,7 +132,7 @@ public class BankClient {
 
   public void runMonitorService() {
     System.out.print("Monitor interval (s) = ");
-    double interval = Util.safeReadDouble();
+    int interval = Util.safeReadInt();
     client.send(
       serverAddress,
       new Request<>(
@@ -139,6 +140,7 @@ public class BankClient {
         new MonitorRequest(interval)
       )
     );
+
     RawMessage msg = client.recv();
     Response<MonitorStatusResponse> resp = Deserializer.deserialize(new Response<MonitorStatusResponse>() {}, msg.payload.get());
     ResponseHeader header = resp.header;
@@ -148,7 +150,27 @@ public class BankClient {
       MonitorStatusResponse respBody = resp.body.get();
       if (respBody.success) {
         System.out.println("Successfully requested to monitor, waiting for update...");
-        // TODO: block and wait for updates
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Void> future = executor.submit(() -> {
+          while (true) {
+            RawMessage monitorMsg = client.recv();
+            Response<MonitorUpdateResponse> monitorUpdate = Deserializer.deserialize(
+              new Response<MonitorUpdateResponse>() {},
+              monitorMsg.payload.get()
+            );
+            String update = monitorUpdate.body.get().info;
+            System.out.println("Update: " + update);
+          }
+        });
+        try {
+          future.get(interval, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+          future.cancel(true);
+        } catch (InterruptedException | ExecutionException e) {
+          e.printStackTrace();
+        }
+        System.out.printf("Finished monitoring for %d seconds\n", interval);
+        executor.shutdownNow();
       } else {
         System.out.println("Failed to request to monitor");
       }
@@ -225,8 +247,7 @@ public class BankClient {
 
   private int askAccountNumber() {
     System.out.print("Your account number = ");
-    int accountNumber = Util.safeReadInt();
-    return accountNumber;
+    return Util.safeReadInt();
   }
 
   private Currency askCurrency() {

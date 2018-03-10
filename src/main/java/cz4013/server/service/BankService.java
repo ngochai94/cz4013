@@ -4,12 +4,24 @@ import cz4013.server.entity.AccountDetail;
 import cz4013.server.storage.Database;
 import cz4013.shared.request.*;
 import cz4013.shared.response.*;
+import cz4013.shared.rpc.Transport;
 
 import java.net.SocketAddress;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class BankService {
   private Database db = new Database();
+  private Transport transport;
+  private Map<SocketAddress, Instant> listeners = new HashMap<>();
   private int nextAvailableAccountNumber = 1;
+
+  public BankService(Transport transport) {
+    this.transport = transport;
+  }
 
   public OpenAccountResponse processOpenAccount(OpenAccountRequest req) {
     int accountNumber = nextAvailableAccountNumber++;
@@ -22,6 +34,7 @@ public class BankService {
         req.balance
       )
     );
+    broadcast(String.format("User %s opens new account with number %d", req.name, accountNumber));
     return new OpenAccountResponse(accountNumber);
   }
 
@@ -37,6 +50,7 @@ public class BankService {
       return CloseAccountResponse.failed("Wrong password");
     }
     db.delete(req.accountNumber);
+    broadcast(String.format("User %s deletes account with number %d", req.name, req.accountNumber));
     return new CloseAccountResponse(true, "");
   }
 
@@ -67,12 +81,16 @@ public class BankService {
       )
     );
     accountDetail = db.query(req.accountNumber);
+    if (req.amount > 0)
+      broadcast(String.format("User %s deposit %f %s to account %d", req.name, req.amount, req.currency, req.accountNumber));
+    else
+      broadcast(String.format("User %s withdraw %f %s from account %d", req.name, -req.amount, req.currency, req.accountNumber));
     return new DepositResponse(accountDetail.currency, accountDetail.amount, true, "");
   }
 
   public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {
-    double interval = req.interval;
-    // TODO: store client's address
+    long interval = req.interval;
+    listeners.put(remote, Instant.now().plusSeconds(interval));
     return new MonitorStatusResponse(true);
   }
 
@@ -81,6 +99,7 @@ public class BankService {
     if (accountDetail == null) {
       return QueryResponse.failed("This account number doesn't exist");
     }
+    broadcast(String.format("Someone queries account %d", req.accountNumber));
     return new QueryResponse(accountDetail.name, accountDetail.currency, accountDetail.amount, true, "");
   }
 
@@ -99,6 +118,22 @@ public class BankService {
       )
     );
     accountDetail = db.query(req.accountNumber);
+    broadcast(String.format("User %s pays maintenance fee for account %d", req.name, req.accountNumber));
     return new PayMaintenanceFeeResponse(accountDetail.currency, accountDetail.amount, true, "");
+  }
+
+  private void broadcast(String info) {
+    purgeListeners();
+    Response<MonitorUpdateResponse> resp = new Response<>(
+      new ResponseHeader(UUID.randomUUID(), Status.OK),
+      Optional.of(new MonitorUpdateResponse(info))
+    );
+    listeners.forEach((socketAddress, x) -> {
+      transport.send(socketAddress, resp);
+    });
+  }
+
+  private void purgeListeners() {
+    listeners.entrySet().removeIf(x -> x.getValue().isBefore(Instant.now()));
   }
 }

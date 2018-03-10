@@ -21,7 +21,11 @@ public class Main {
     int port = Integer.parseInt(env.getOrDefault("PORT", "12740"));
     boolean atMostOnce = Integer.parseInt(env.getOrDefault("AT_MOST_ONCE", "0")) != 0;
 
-    BankService svc = new BankService();
+    BufferPool pool = new BufferPool(8192, 1024);
+    Transport server = new Transport(new DatagramSocket(new InetSocketAddress(host, port)), pool);
+    System.out.printf("Listening on udp://%s:%d\n", host, port);
+
+    BankService svc = new BankService(server);
     Router r = new Router(new LruCache<>(atMostOnce ? 1024 : 0))
       .bind("openAccount", svc::processOpenAccount, new OpenAccountRequest() {})
       .bind("closeAccount", svc::processCloseAccount, new CloseAccountRequest() {})
@@ -30,9 +34,6 @@ public class Main {
       .bind("query", svc::processQuery, new QueryRequest() {})
       .bind("payMaintenanceFee", svc::processPayMaintenanceFee, new PayMaintenanceFeeRequest() {});
 
-    BufferPool pool = new BufferPool(8192, 1024);
-    Transport server = new Transport(new DatagramSocket(new InetSocketAddress(host, port)), pool);
-    System.out.printf("Listening on udp://%s:%d\n", host, port);
     for (; ; ) {
       try (RawMessage req = server.recv()) {
         Response<?> resp = r.route(req);
