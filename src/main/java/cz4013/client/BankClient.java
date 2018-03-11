@@ -3,23 +3,16 @@ package cz4013.client;
 import cz4013.shared.currency.Currency;
 import cz4013.shared.request.*;
 import cz4013.shared.response.*;
-import cz4013.shared.rpc.RawMessage;
-import cz4013.shared.rpc.Transport;
-import cz4013.shared.serialization.Deserializer;
 
-import java.net.SocketAddress;
+import java.time.Duration;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.*;
 
 public class BankClient {
   private static int PASSWORD_LENGTH = 6;
-  private Transport client;
-  private SocketAddress serverAddress;
+  private Client client;
 
-  public BankClient(Transport client, SocketAddress serverAddress) {
+  public BankClient(Client client) {
     this.client = client;
-    this.serverAddress = serverAddress;
   }
 
   public void runOpenAccountService() {
@@ -28,21 +21,12 @@ public class BankClient {
     String password = askPassword();
     Currency currency = askCurrency();
     Double balance = askAmount();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "openAccount"),
-        new OpenAccountRequest(name, password, currency, balance)
-      )
+    OpenAccountResponse resp = client.request(
+      "openAccount",
+      new OpenAccountRequest(name, password, currency, balance),
+      new Response<OpenAccountResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<OpenAccountResponse> resp = Deserializer.deserialize(new Response<OpenAccountResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
-    } else {
-      System.out.printf("Successfully created a new bank account with number = %d\n", resp.body.get().accountNumber);
-    }
+    System.out.printf("Successfully created a new bank account with number = %d\n", resp.accountNumber);
   }
 
   public void runCloseAccountService() {
@@ -50,25 +34,15 @@ public class BankClient {
     int accountNumber = askAccountNumber();
     String name = askName();
     String password = askPassword();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "closeAccount"),
-        new CloseAccountRequest(name, accountNumber, password)
-      )
+    CloseAccountResponse resp = client.request(
+      "closeAccount",
+      new CloseAccountRequest(name, accountNumber, password),
+      new Response<CloseAccountResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<CloseAccountResponse> resp = Deserializer.deserialize(new Response<CloseAccountResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (resp.success) {
+      System.out.printf("Successfully closed bank account with number = %d\n", accountNumber);
     } else {
-      CloseAccountResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.printf("Successfully closed bank account with number = %d\n", accountNumber);
-      } else {
-        System.out.printf("Failed to close bank account with reason: %s\n", respBody.errorMessage);
-      }
+      System.out.printf("Failed to close bank account with reason: %s\n", resp.errorMessage);
     }
   }
 
@@ -79,25 +53,15 @@ public class BankClient {
     String password = askPassword();
     Currency currency = askCurrency();
     Double amount = askAmount();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "deposit"),
-        new DepositRequest(name, accountNumber, password, currency, amount)
-      )
+    DepositResponse resp = client.request(
+      "deposit",
+      new DepositRequest(name, accountNumber, password, currency, amount),
+      new Response<DepositResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<DepositResponse> resp = Deserializer.deserialize(new Response<DepositResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (resp.success) {
+      System.out.printf("Successfully deposit, new balance = %f %s\n", resp.balance, resp.currency);
     } else {
-      DepositResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.printf("Successfully deposit, new balance = %f %s\n", respBody.balance, respBody.currency);
-      } else {
-        System.out.printf("Failed to deposit with reason: %s\n", respBody.errorMessage);
-      }
+      System.out.printf("Failed to deposit with reason: %s\n", resp.errorMessage);
     }
   }
 
@@ -108,72 +72,38 @@ public class BankClient {
     String password = askPassword();
     Currency currency = askCurrency();
     Double amount = askAmount();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "deposit"),
-        new DepositRequest(name, accountNumber, password, currency, -amount)
-      )
+
+    DepositResponse resp = client.request(
+      "deposit",
+      new DepositRequest(name, accountNumber, password, currency, -amount),
+      new Response<DepositResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<DepositResponse> resp = Deserializer.deserialize(new Response<DepositResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (resp.success) {
+      System.out.printf("Successfully withdraw, new balance = %f %s\n", resp.balance, resp.currency);
     } else {
-      DepositResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.printf("Successfully withdraw, new balance = %f %s\n", respBody.balance, respBody.currency);
-      } else {
-        System.out.printf("Failed to withdraw with reason: %s\n", respBody.errorMessage);
-      }
+      System.out.printf("Failed to withdraw with reason: %s\n", resp.errorMessage);
     }
   }
 
   public void runMonitorService() {
     System.out.print("Monitor interval (s) = ");
     int interval = Util.safeReadInt();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "monitor"),
-        new MonitorRequest(interval)
-      )
+    MonitorStatusResponse status = client.request(
+      "monitor",
+      new MonitorRequest(interval),
+      new Response<MonitorStatusResponse>() {}
     );
 
-    RawMessage msg = client.recv();
-    Response<MonitorStatusResponse> resp = Deserializer.deserialize(new Response<MonitorStatusResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (status.success) {
+      System.out.println("Successfully requested to monitor, waiting for updates...");
+      client.poll(
+        new Response<MonitorUpdateResponse>() {},
+        Duration.ofSeconds(interval),
+        update -> System.out.println("Update: " + update.info)
+      );
+      System.out.println("Finished monitoring.");
     } else {
-      MonitorStatusResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.println("Successfully requested to monitor, waiting for update...");
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Void> future = executor.submit(() -> {
-          while (true) {
-            RawMessage monitorMsg = client.recv();
-            Response<MonitorUpdateResponse> monitorUpdate = Deserializer.deserialize(
-              new Response<MonitorUpdateResponse>() {},
-              monitorMsg.payload.get()
-            );
-            String update = monitorUpdate.body.get().info;
-            System.out.println("Update: " + update);
-          }
-        });
-        try {
-          future.get(interval, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-          future.cancel(true);
-        } catch (InterruptedException | ExecutionException e) {
-          e.printStackTrace();
-        }
-        System.out.printf("Finished monitoring for %d seconds\n", interval);
-        executor.shutdownNow();
-      } else {
-        System.out.println("Failed to request to monitor");
-      }
+      System.out.println("Failed to request to monitor");
     }
   }
 
@@ -181,25 +111,15 @@ public class BankClient {
     System.out.println("Please input the following information to query from an account");
     int accountNumber = askAccountNumber();
     String password = askPassword();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "query"),
-        new QueryRequest(accountNumber, password)
-      )
+    QueryResponse resp = client.request(
+      "query",
+      new QueryRequest(accountNumber, password),
+      new Response<QueryResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<QueryResponse> resp = Deserializer.deserialize(new Response<QueryResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (resp.success) {
+      System.out.printf("Successfully queried, name = %s, balance = %f %s\n", resp.name, resp.balance, resp.currency);
     } else {
-      QueryResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.printf("Successfully queried, name = %s, balance = %f %s\n", respBody.name, respBody.balance, respBody.currency);
-      } else {
-        System.out.printf("Failed to query with reason: %s\n", respBody.errorMessage);
-      }
+      System.out.printf("Failed to query with reason: %s\n", resp.errorMessage);
     }
   }
 
@@ -208,25 +128,16 @@ public class BankClient {
     int accountNumber = askAccountNumber();
     String name = askName();
     String password = askPassword();
-    client.send(
-      serverAddress,
-      new Request<>(
-        new RequestHeader(UUID.randomUUID(), "payMaintenanceFee"),
-        new PayMaintenanceFeeRequest(accountNumber, name, password)
-      )
+
+    PayMaintenanceFeeResponse resp = client.request(
+      "payMaintenanceFee",
+      new PayMaintenanceFeeRequest(accountNumber, name, password),
+      new Response<PayMaintenanceFeeResponse>() {}
     );
-    RawMessage msg = client.recv();
-    Response<PayMaintenanceFeeResponse> resp = Deserializer.deserialize(new Response<PayMaintenanceFeeResponse>() {}, msg.payload.get());
-    ResponseHeader header = resp.header;
-    if (header.status != Status.OK) {
-      System.out.printf("Request failed with status = %s\n", header.status);
+    if (resp.success) {
+      System.out.printf("Successfully pay maintenance fee, new balance = %f %s\n", resp.balance, resp.currency);
     } else {
-      PayMaintenanceFeeResponse respBody = resp.body.get();
-      if (respBody.success) {
-        System.out.printf("Successfully pay maintenance fee, new balance = %f %s\n", respBody.balance, respBody.currency);
-      } else {
-        System.out.printf("Failed to pay maintenance fee with reason: %s\n", respBody.errorMessage);
-      }
+      System.out.printf("Failed to pay maintenance fee with reason: %s\n", resp.errorMessage);
     }
   }
 

@@ -5,46 +5,60 @@ import cz4013.shared.rpc.Transport;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.net.SocketException;
+import java.time.Duration;
 import java.util.Map;
 
 public class Main {
-  private static Transport client;
-  private static SocketAddress serverAddress;
-
   public static void main(String[] args) throws SocketException {
     Map<String, String> env = System.getenv();
     String clientHost = env.getOrDefault("CLIENT_HOST", "127.0.0.1");
     String serverHost = env.getOrDefault("SERVER_HOST", "127.0.0.1");
     int clientPort = Integer.parseInt(env.getOrDefault("CLIENT_PORT", "12741"));
     int serverPort = Integer.parseInt(env.getOrDefault("SERVER_PORT", "12740"));
-    BufferPool pool = new BufferPool(8192, 1024);
-    client = new Transport(new DatagramSocket(new InetSocketAddress(clientHost, clientPort)), pool);
-    serverAddress = new InetSocketAddress(serverHost, serverPort);
+    Duration timeout = Duration.ofSeconds(Integer.parseInt(env.getOrDefault("TIMEOUT_SEC", "5")));
+    int maxAttempts = Integer.parseInt(env.getOrDefault("MAX_ATTEMPTS", "5"));
+    DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientHost, clientPort));
+    socket.setSoTimeout((int) timeout.toMillis());
 
-    BankClient bankClient = new BankClient(client, serverAddress);
+    BankClient bankClient = new BankClient(new Client(
+      new Transport(socket, new BufferPool(8192, 1024)),
+      new InetSocketAddress(serverHost, serverPort), maxAttempts));
 
     boolean shouldStop = false;
     while (!shouldStop) {
       int userChoice = askUserChoice();
-      switch (userChoice) {
-        case 1: bankClient.runOpenAccountService();
-          break;
-        case 2: bankClient.runCloseAccountService();
-          break;
-        case 3: bankClient.runDepositService();
-          break;
-        case 4: bankClient.runWithdrawService();
-          break;
-        case 5: bankClient.runMonitorService();
-          break;
-        case 6: bankClient.runQueryService();
-          break;
-        case 7: bankClient.runMaintenanceService();
-          break;
-        default: shouldStop = true;
-          break;
+      try {
+        switch (userChoice) {
+          case 1:
+            bankClient.runOpenAccountService();
+            break;
+          case 2:
+            bankClient.runCloseAccountService();
+            break;
+          case 3:
+            bankClient.runDepositService();
+            break;
+          case 4:
+            bankClient.runWithdrawService();
+            break;
+          case 5:
+            bankClient.runMonitorService();
+            break;
+          case 6:
+            bankClient.runQueryService();
+            break;
+          case 7:
+            bankClient.runMaintenanceService();
+            break;
+          default:
+            shouldStop = true;
+            break;
+        }
+      } catch (NoResponseException e) {
+        System.out.println("No response received.");
+      } catch (FailedRequestException e) {
+        System.out.printf("Failed to send request with error %s \n", e.status);
       }
     }
     Util.closeReader();
