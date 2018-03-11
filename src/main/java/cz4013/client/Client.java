@@ -17,7 +17,9 @@ import java.util.function.Consumer;
 
 import static cz4013.shared.serialization.Deserializer.deserialize;
 
-
+/**
+ * This class acts as the transport layer in client side
+ */
 public class Client {
   private final Transport transport;
   private final int maxAttempts;
@@ -29,6 +31,17 @@ public class Client {
     this.maxAttempts = maxAttempts;
   }
 
+  /**
+   * Send a request to server side via UDP
+   * This method handles the necessary retries in case the UDP packets are lost
+   *
+   * @param method the method name to be invoked in server side
+   * @param reqBody the body of the request
+   * @param respObj an empty response object, to be used in deserialization
+   * @param <ReqBody> type of request body
+   * @param <RespBody> type of response body
+   * @return the body of the response
+   */
   public <ReqBody, RespBody> RespBody request(String method, ReqBody reqBody, Response<RespBody> respObj) {
     UUID id = UUID.randomUUID();
 
@@ -59,6 +72,14 @@ public class Client {
     throw new NoResponseException();
   }
 
+  /**
+   * Wait to update from server
+   *
+   * @param respObj an empty response object, to be used in deserialization
+   * @param interval time to wait for update, in second
+   * @param callback the callback denotes how to handle update from server
+   * @param <RespBody> type of the response body
+   */
   public <RespBody> void poll(Response<RespBody> respObj, Duration interval, Consumer<RespBody> callback) {
     Instant end = Instant.now().plus(interval);
 
