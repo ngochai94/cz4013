@@ -17,13 +17,13 @@ public class Main {
     int clientPort = Integer.parseInt(env.getOrDefault("CLIENT_PORT", "12741"));
     int serverPort = Integer.parseInt(env.getOrDefault("SERVER_PORT", "12740"));
     Duration timeout = Duration.ofSeconds(Integer.parseInt(env.getOrDefault("TIMEOUT_SEC", "5")));
-    int maxRetries = Integer.parseInt(env.getOrDefault("MAX_RETRIES", "5"));
+    int maxAttempts = Integer.parseInt(env.getOrDefault("MAX_ATTEMPTS", "5"));
     DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientHost, clientPort));
     socket.setSoTimeout((int) timeout.toMillis());
 
     BankClient bankClient = new BankClient(new Client(
       new Transport(socket, new BufferPool(8192, 1024)),
-      new InetSocketAddress(serverHost, serverPort), maxRetries));
+      new InetSocketAddress(serverHost, serverPort), maxAttempts));
 
     boolean shouldStop = false;
     while (!shouldStop) {

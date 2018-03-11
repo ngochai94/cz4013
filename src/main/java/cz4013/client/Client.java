@@ -20,19 +20,19 @@ import static cz4013.shared.serialization.Deserializer.deserialize;
 
 public class Client {
   private final Transport transport;
-  private SocketAddress serverAddr;
-  private final int maxRetries;
+  private final int maxAttempts;
+  private final SocketAddress serverAddr;
 
-  public Client(Transport transport, SocketAddress serverAddr, int maxRetries) {
+  public Client(Transport transport, SocketAddress serverAddr, int maxAttempts) {
     this.transport = transport;
     this.serverAddr = serverAddr;
-    this.maxRetries = maxRetries;
+    this.maxAttempts = maxAttempts;
   }
 
   public <ReqBody, RespBody> RespBody request(String method, ReqBody reqBody, Response<RespBody> respObj) {
     UUID id = UUID.randomUUID();
 
-    for (int triesLeft = maxRetries; triesLeft > 0; --triesLeft) {
+    for (int triesLeft = maxAttempts; triesLeft > 0; --triesLeft) {
       try {
         transport.send(serverAddr, new Request<>(new RequestHeader(id, method), reqBody));
         try (RawMessage rawResp = transport.recv()) {
@@ -63,7 +63,7 @@ public class Client {
     Instant end = Instant.now().plus(interval);
 
     Thread pollingThread = new Thread(() -> {
-      for (;;) {
+      for (; ; ) {
         if (Instant.now().isAfter(end)) {
           return;
         }
