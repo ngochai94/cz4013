@@ -101,6 +101,7 @@ public class BankClient {
         Duration.ofSeconds(interval),
         update -> System.out.println("Update: " + update.info)
       );
+      System.out.println("Finished monitoring.");
     } else {
       System.out.println("Failed to request to monitor");
     }
