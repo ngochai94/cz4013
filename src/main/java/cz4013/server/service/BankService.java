@@ -13,16 +13,30 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * This class provide various banking services and handle interaction with db
+ */
 public class BankService {
   private Database db = new Database();
   private Transport transport;
   private Map<SocketAddress, Instant> listeners = new HashMap<>();
   private int nextAvailableAccountNumber = 1;
 
+  /**
+   * Constructor for the BankService
+   *
+   * @param transport transport layer to be used to send data for registered monitoring clients
+   */
   public BankService(Transport transport) {
     this.transport = transport;
   }
 
+  /**
+   * Process an open account request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public OpenAccountResponse processOpenAccount(OpenAccountRequest req) {
     int accountNumber = nextAvailableAccountNumber++;
     db.store(
@@ -38,6 +52,12 @@ public class BankService {
     return new OpenAccountResponse(accountNumber);
   }
 
+  /**
+   * Process a close account request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public CloseAccountResponse processCloseAccount(CloseAccountRequest req) {
     AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
@@ -54,6 +74,12 @@ public class BankService {
     return new CloseAccountResponse(true, "");
   }
 
+  /**
+   * Process a deposit/withdraw request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public DepositResponse processDeposit(DepositRequest req) {
     AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
@@ -88,12 +114,24 @@ public class BankService {
     return new DepositResponse(accountDetail.currency, accountDetail.amount, true, "");
   }
 
+  /**
+   * Process a monitoring request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {
     long interval = req.interval;
     listeners.put(remote, Instant.now().plusSeconds(interval));
     return new MonitorStatusResponse(true);
   }
 
+  /**
+   * Process a query request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public QueryResponse processQuery(QueryRequest req) {
     AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
@@ -103,6 +141,12 @@ public class BankService {
     return new QueryResponse(accountDetail.name, accountDetail.currency, accountDetail.amount, true, "");
   }
 
+  /**
+   * Process a pay maintenance fee request
+   *
+   * @param req the request to be processed
+   * @return the response after processing the given request
+   */
   public PayMaintenanceFeeResponse processPayMaintenanceFee(PayMaintenanceFeeRequest req) {
     AccountDetail accountDetail = db.query(req.accountNumber);
     if (accountDetail == null) {
