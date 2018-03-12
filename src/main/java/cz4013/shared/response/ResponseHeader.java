@@ -3,6 +3,9 @@ package cz4013.shared.response;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Header of a response, contains an ID equals to the corresponding request and a status code
+ */
 public class ResponseHeader {
   public UUID uuid;
   public Status status;

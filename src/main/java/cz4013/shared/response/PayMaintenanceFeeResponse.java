@@ -2,6 +2,9 @@ package cz4013.shared.response;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The response for request to pay maintenance fee
+ */
 public class PayMaintenanceFeeResponse {
   public Currency currency;
   public Double balance;

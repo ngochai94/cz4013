@@ -3,6 +3,9 @@ package cz4013.shared.request;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Header of a request, contains a unique ID and the method name
+ */
 public class RequestHeader {
   public UUID uuid;
   public String method;

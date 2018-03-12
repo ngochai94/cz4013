@@ -1,5 +1,8 @@
 package cz4013.shared.response;
 
+/**
+ * The response to a request to close a bank account
+ */
 public class CloseAccountResponse {
   public boolean success;
   public String errorMessage;

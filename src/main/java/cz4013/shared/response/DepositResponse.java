@@ -2,6 +2,9 @@ package cz4013.shared.response;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The response of a request to deposit
+ */
 public class DepositResponse {
   public Currency currency;
   public double balance;

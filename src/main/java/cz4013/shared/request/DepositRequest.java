@@ -2,6 +2,9 @@ package cz4013.shared.request;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The request to deposit to a bank account
+ */
 public class DepositRequest {
   public String name;
   public int accountNumber;

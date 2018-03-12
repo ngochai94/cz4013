@@ -2,6 +2,9 @@ package cz4013.shared.response;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The response to a request to query information
+ */
 public class QueryResponse {
   public String name;
   public Currency currency;

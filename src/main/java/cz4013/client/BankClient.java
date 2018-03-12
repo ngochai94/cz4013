@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.Optional;
 
 /**
- * This class provides client side service call
+ * This class provides client side service calls.
  */
 public class BankClient {
   private static int PASSWORD_LENGTH = 6;
@@ -19,7 +19,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to create a new bank account
+   * Send a request to server to create a new bank account.
    */
   public void runOpenAccountService() {
     System.out.println("Please input the following information to open an account");
@@ -36,7 +36,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to close a bank account
+   * Send a request to server to close a bank account.
    */
   public void runCloseAccountService() {
     System.out.println("Please input the following information to close an account");
@@ -56,7 +56,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to deposit to a bank account
+   * Send a request to server to deposit to a bank account.
    */
   public void runDepositService() {
     System.out.println("Please input the following information to deposit to an account");
@@ -78,7 +78,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to withdraw from a bank account
+   * Send a request to server to withdraw from a bank account.
    */
   public void runWithdrawService() {
     System.out.println("Please input the following information to withdraw from an account");
@@ -101,7 +101,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to monitor updates from other clients
+   * Send a request to server to monitor updates from other clients.
    */
   public void runMonitorService() {
     System.out.print("Monitor interval (s) = ");
@@ -126,7 +126,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to get info of a bank account
+   * Send a request to server to get info of a bank account.
    */
   public void runQueryService() {
     System.out.println("Please input the following information to query from an account");
@@ -145,7 +145,7 @@ public class BankClient {
   }
 
   /**
-   * Ask for user input and send a request to server to pay maintenance fee
+   * Send a request to server to pay maintenance fee
    */
   public void runMaintenanceService() {
     System.out.println("Please input the following information to pay the maintenance fee");

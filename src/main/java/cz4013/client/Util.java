@@ -3,7 +3,7 @@ package cz4013.client;
 import java.util.Scanner;
 
 /**
- * This class provide utility to read user input via stdin
+ * This class provides utility to read user input via stdin.
  */
 public class Util {
   private static Scanner reader = new Scanner(System.in);
@@ -11,7 +11,7 @@ public class Util {
   /**
    * Read an integer from stdin
    * This method will attempt to read user input until it encounters
-   * a valid integer
+   * a valid integer.
    *
    * @return an integer from stdin
    */
@@ -27,7 +27,7 @@ public class Util {
   /**
    * Read a double from stdin
    * This method will attempt to read user input until it encounters
-   * a valid double
+   * a valid double.
    *
    * @return an double from stdin
    */
@@ -41,7 +41,7 @@ public class Util {
   }
 
   /**
-   * Read a line from stdin
+   * Read a line from stdin.
    *
    * @return a line from stdin
    */
@@ -50,7 +50,7 @@ public class Util {
   }
 
   /**
-   * Close reader. Used when exiting from main execution
+   * Close reader. Used when exiting from main execution.
    */
   public static void closeReader() {
     reader.close();

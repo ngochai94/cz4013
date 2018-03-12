@@ -2,6 +2,9 @@ package cz4013.shared.request;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The request to open a bank account
+ */
 public class OpenAccountRequest {
   public String name;
   public String password;
