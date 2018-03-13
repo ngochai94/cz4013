@@ -2,6 +2,12 @@ package cz4013.shared.request;
 
 import java.util.Objects;
 
+/**
+ * The request to be sent from client to server,
+ * contains a request header and a request body.
+ *
+ * @param <ReqBody> type of request body
+ */
 public class Request<ReqBody> {
   public RequestHeader header;
   public ReqBody body;

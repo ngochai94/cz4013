@@ -1,5 +1,8 @@
 package cz4013.shared.response;
 
+/**
+ * The response to a monitor request.
+ */
 public class MonitorStatusResponse {
   public boolean success;
 

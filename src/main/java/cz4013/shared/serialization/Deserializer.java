@@ -19,12 +19,12 @@ public class Deserializer {
 
   /**
    * Deserializes an object from a buffer.
-   *
+   * <p>
    * Note that to support both generic and non-generic classes,
    * the given object must be created with anonymous class syntax due to type erasure.
-   *
+   * <p>
    * For example:
-   * ```
+   * <pre>{@code
    * class Clazz<T> {}
    *
    * // INCORRECT
@@ -32,7 +32,7 @@ public class Deserializer {
    *
    * // Correct (note the extra {})
    * deserialize(new Clazz<Integer>() {}, buffer);
-   * ```
+   * }</pre>
    *
    * @param obj the object to be deserialized into
    * @param buf the buffer to read from
@@ -245,16 +245,16 @@ public class Deserializer {
 
   /**
    * Makes a map from type parameters to type arguments of a `ParameterizedType`.
-   *
+   * <p>
    * Example:
-   * ```
+   * <pre>{@code
    * class Clazz<T, U, V> {}
    *
    * makeTypeMap((ParameterizedType) new Clazz<Integer, Boolean, Float>() {}.getClass().getGenericSuperclass(), EMPTY_TYPE_MAP);
    * // => {T=java.lang.Integer, U=java.lang.Boolean, V=java.lang.Float}
-   * ```
+   * }</pre>
    *
-   * @param ty            the type
+   * @param pty           the type
    * @param parentTypeMap the type map of the generic class containing this `ParameterizedType`.
    * @return the map
    */

@@ -2,6 +2,9 @@ package cz4013.shared.response;
 
 import cz4013.shared.currency.Currency;
 
+/**
+ * The response to a query request.
+ */
 public class QueryResponse {
   public String name;
   public Currency currency;
@@ -20,12 +23,12 @@ public class QueryResponse {
     this.errorMessage = errorMessage;
   }
 
+  public static QueryResponse failed(String errorMessage) {
+    return new QueryResponse("", Currency.USD, 0.0, false, errorMessage);
+  }
+
   @Override
   public String toString() {
     return "QueryResponse(" + name + ", " + currency + ", " + balance + ", " + success + ", " + errorMessage + ")";
-  }
-
-  public static QueryResponse failed(String errorMessage) {
-    return new QueryResponse("", Currency.USD, 0.0, false, errorMessage);
   }
 }

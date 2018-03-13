@@ -1,5 +1,8 @@
 package cz4013.shared.response;
 
+/**
+ * Status codes returned from a response.
+ */
 public enum Status {
   NOT_FOUND("service not found"),
   MALFORMED("malformed request"),

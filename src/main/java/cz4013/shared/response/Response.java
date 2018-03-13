@@ -4,6 +4,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * The response to be sent back from server to client,
+ * contains a response header and a response body.
+ *
+ * @param <RespBody> type of response body
+ */
 public class Response<RespBody> {
   public ResponseHeader header;
   public Optional<RespBody> body;
@@ -34,6 +40,6 @@ public class Response<RespBody> {
     if (!(o instanceof Response)) return false;
     Response<?> response = (Response<?>) o;
     return Objects.equals(header, response.header) &&
-             Objects.equals(body, response.body);
+      Objects.equals(body, response.body);
   }
 }

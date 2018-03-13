@@ -4,6 +4,9 @@ import cz4013.shared.container.PooledByteBuffer;
 
 import java.net.SocketAddress;
 
+/**
+ * A UDP datagram: its sender and its content.
+ */
 public class RawMessage implements AutoCloseable {
   public SocketAddress remote;
   public PooledByteBuffer payload;

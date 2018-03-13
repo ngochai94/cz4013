@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * All available currencies.
+ */
 public enum Currency {
   USD("USD"),
   EUR("EUR"),
@@ -15,10 +18,16 @@ public enum Currency {
     this.code = code;
   }
 
+  /**
+   * @return stream of available currencies
+   */
   public static Stream<Currency> getAllCurrencies() {
     return Arrays.stream(Currency.values());
   }
 
+  /**
+   * @return list of available currencies as a string
+   */
   public static String getAllCurrenciesString() {
     return String.join(", ", Currency.getAllCurrencies().map(Currency::toString).collect(Collectors.toList()));
   }
