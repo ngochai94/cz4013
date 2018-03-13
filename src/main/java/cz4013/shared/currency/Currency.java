@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This enum contains the available currencies
+ * All available currencies.
  */
 public enum Currency {
   USD("USD"),

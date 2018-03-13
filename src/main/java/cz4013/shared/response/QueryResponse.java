@@ -3,7 +3,7 @@ package cz4013.shared.response;
 import cz4013.shared.currency.Currency;
 
 /**
- * The response to a request to query information
+ * The response to a query request.
  */
 public class QueryResponse {
   public String name;

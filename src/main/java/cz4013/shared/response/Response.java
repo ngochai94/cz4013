@@ -6,7 +6,7 @@ import java.util.UUID;
 
 /**
  * The response to be sent back from server to client,
- * contains a response header and a response body
+ * contains a response header and a response body.
  *
  * @param <RespBody> type of response body
  */

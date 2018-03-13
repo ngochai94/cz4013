@@ -1,7 +1,7 @@
 package cz4013.shared.response;
 
 /**
- * The response for a request to open a bank account
+ * The response to a open bank account request.
  */
 public class OpenAccountResponse {
   public int accountNumber;

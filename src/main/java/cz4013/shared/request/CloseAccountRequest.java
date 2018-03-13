@@ -1,7 +1,7 @@
 package cz4013.shared.request;
 
 /**
- * The request to close a bank account
+ * The request to close a bank account.
  */
 public class CloseAccountRequest {
   public String name;

@@ -3,7 +3,7 @@ package cz4013.shared.response;
 import cz4013.shared.currency.Currency;
 
 /**
- * The response for request to pay maintenance fee
+ * The response to a pay maintenance free request.
  */
 public class PayMaintenanceFeeResponse {
   public Currency currency;

@@ -1,7 +1,7 @@
 package cz4013.shared.request;
 
 /**
- * The request to query information of a bank account
+ * The request to query information of a bank account.
  */
 public class QueryRequest {
   public int accountNumber;

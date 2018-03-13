@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * The request to be sent from client to server,
- * contains a request header and a request body
+ * contains a request header and a request body.
  *
  * @param <ReqBody> type of request body
  */

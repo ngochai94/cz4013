@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Header of a response, contains an ID equals to the corresponding request and a status code
+ * Header of a response: the corresponding request's ID and the response's status code.
  */
 public class ResponseHeader {
   public UUID uuid;

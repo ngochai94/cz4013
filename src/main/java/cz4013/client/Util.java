@@ -9,7 +9,7 @@ public class Util {
   private static Scanner reader = new Scanner(System.in);
 
   /**
-   * Read an integer from stdin
+   * Reads an integer from stdin.
    * This method will attempt to read user input until it encounters
    * a valid integer.
    *
@@ -25,7 +25,7 @@ public class Util {
   }
 
   /**
-   * Read a double from stdin
+   * Reads a double from stdin.
    * This method will attempt to read user input until it encounters
    * a valid double.
    *
@@ -41,7 +41,7 @@ public class Util {
   }
 
   /**
-   * Read a line from stdin.
+   * Reads a line from stdin.
    *
    * @return a line from stdin
    */
@@ -50,7 +50,7 @@ public class Util {
   }
 
   /**
-   * Close reader. Used when exiting from main execution.
+   * Closes the associated reader. Used when exiting from main execution.
    */
   public static void closeReader() {
     reader.close();

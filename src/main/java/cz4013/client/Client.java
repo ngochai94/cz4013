@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import static cz4013.shared.serialization.Deserializer.deserialize;
 
 /**
- * This class acts as the transport layer in client side
+ * This class acts as the transport layer in client side.
  */
 public class Client {
   private final Transport transport;
@@ -32,8 +32,8 @@ public class Client {
   }
 
   /**
-   * Send a request to server side via UDP
-   * This method handles the necessary retries in case the UDP packets are lost
+   * Sends a request to server side via UDP.
+   * This method handles the necessary retries in case the UDP packets are lost.
    *
    * @param method the method name to be invoked in server side
    * @param reqBody the body of the request
@@ -73,7 +73,7 @@ public class Client {
   }
 
   /**
-   * Wait to update from server
+   * Waits for updates from server during the given interval.
    *
    * @param respObj an empty response object, to be used in deserialization
    * @param interval time to wait for update, in second

@@ -4,7 +4,7 @@ import java.net.SocketAddress;
 import java.util.function.BiFunction;
 
 /**
- * This class contains the route for a specific request method
+ * A route: a method, its request type and its handler.
  */
 public class Route {
   public Object reqBody;

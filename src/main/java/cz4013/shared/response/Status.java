@@ -1,7 +1,7 @@
 package cz4013.shared.response;
 
 /**
- * Status code for a response
+ * Status codes returned from a response.
  */
 public enum Status {
   NOT_FOUND("service not found"),

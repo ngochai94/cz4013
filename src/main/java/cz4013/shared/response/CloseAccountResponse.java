@@ -1,7 +1,7 @@
 package cz4013.shared.response;
 
 /**
- * The response to a request to close a bank account
+ * The response to a close bank account request.
  */
 public class CloseAccountResponse {
   public boolean success;

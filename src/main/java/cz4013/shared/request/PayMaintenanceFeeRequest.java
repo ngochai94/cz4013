@@ -1,7 +1,7 @@
 package cz4013.shared.request;
 
 /**
- * The request to pay maintenance fee for a bank account
+ * The request to pay maintenance fee for a bank account.
  */
 public class PayMaintenanceFeeRequest {
   public int accountNumber;

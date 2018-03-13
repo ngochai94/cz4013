@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Header of a request, contains a unique ID and the method name
+ * Header of a request: its unique ID and and its method.
  */
 public class RequestHeader {
   public UUID uuid;

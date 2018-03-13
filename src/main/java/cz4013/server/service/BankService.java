@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * This class provide various banking services and handle interaction with db
+ * This class provides various banking services and handle interaction with DB.
  */
 public class BankService {
   private Database db = new Database();
@@ -23,7 +23,7 @@ public class BankService {
   private int nextAvailableAccountNumber = 1;
 
   /**
-   * Constructor for the BankService
+   * Constructs a {@code BankService}.
    *
    * @param transport transport layer to be used to send data for registered monitoring clients
    */
@@ -32,7 +32,7 @@ public class BankService {
   }
 
   /**
-   * Process an open account request
+   * Processes an open account request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request
@@ -53,7 +53,7 @@ public class BankService {
   }
 
   /**
-   * Process a close account request
+   * Processes a close account request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request
@@ -75,7 +75,7 @@ public class BankService {
   }
 
   /**
-   * Process a deposit/withdraw request
+   * Processes a deposit/withdraw request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request
@@ -115,7 +115,7 @@ public class BankService {
   }
 
   /**
-   * Process a monitoring request
+   * Processes a monitoring request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request
@@ -127,7 +127,7 @@ public class BankService {
   }
 
   /**
-   * Process a query request
+   * Processes a query request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request
@@ -142,7 +142,7 @@ public class BankService {
   }
 
   /**
-   * Process a pay maintenance fee request
+   * Processes a pay maintenance fee request.
    *
    * @param req the request to be processed
    * @return the response after processing the given request

@@ -17,8 +17,9 @@ import java.util.function.Function;
 import static cz4013.shared.serialization.Deserializer.deserialize;
 
 /**
- * This class contains information of how to route the requests
- * It will cache the response and return the old response for duplicated request
+ * This class contains the necessary information to handle incoming requests.
+ *
+ * Responses are cached and reused later for duplicated requests.
  */
 public class Router {
   private Map<String, Route> routes = new HashMap<>();
@@ -29,8 +30,8 @@ public class Router {
   }
 
   /**
-   * Bind a handler with a request method
-   * This handler take 1 input which is the request body
+   * Binds a handler with a request method.
+   * This handler takes 1 input which is the request body.
    *
    * @param method method name to bind
    * @param handler handler for the corresponding method
@@ -52,8 +53,8 @@ public class Router {
   }
 
   /**
-   * Bind a handler with a request method
-   * This handler take 2 inputs which are the request body and the client's address
+   * Binds a handler with a request method.
+   * This handler takes 2 inputs which are the request body and the client's address.
    *
    * @param method method name to bind
    * @param handler handler for the corresponding method
@@ -94,9 +95,9 @@ public class Router {
   }
 
   /**
-   * Route a request
+   * Routes a request.
    *
-   * @param req request
+   * @param req the request
    * @return response
    */
   public Response<?> route(RawMessage req) {

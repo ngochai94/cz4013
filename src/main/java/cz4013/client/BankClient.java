@@ -19,7 +19,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to create a new bank account.
+   * Sends a request to server to create a new bank account.
    */
   public void runOpenAccountService() {
     System.out.println("Please input the following information to open an account");
@@ -36,7 +36,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to close a bank account.
+   * Sends a request to server to close a bank account.
    */
   public void runCloseAccountService() {
     System.out.println("Please input the following information to close an account");
@@ -56,7 +56,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to deposit to a bank account.
+   * Sends a request to server to deposit to a bank account.
    */
   public void runDepositService() {
     System.out.println("Please input the following information to deposit to an account");
@@ -78,7 +78,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to withdraw from a bank account.
+   * Sends a request to server to withdraw from a bank account.
    */
   public void runWithdrawService() {
     System.out.println("Please input the following information to withdraw from an account");
@@ -101,7 +101,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to monitor updates from other clients.
+   * Sends a request to server to monitor updates from other clients.
    */
   public void runMonitorService() {
     System.out.print("Monitor interval (s) = ");
@@ -126,7 +126,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to get info of a bank account.
+   * Sends a request to server to get info of a bank account.
    */
   public void runQueryService() {
     System.out.println("Please input the following information to query from an account");
@@ -145,7 +145,7 @@ public class BankClient {
   }
 
   /**
-   * Send a request to server to pay maintenance fee
+   * Sends a request to server to pay maintenance fee.
    */
   public void runMaintenanceService() {
     System.out.println("Please input the following information to pay the maintenance fee");
