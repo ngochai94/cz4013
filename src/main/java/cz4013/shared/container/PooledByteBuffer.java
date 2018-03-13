@@ -17,6 +17,7 @@ public class PooledByteBuffer implements AutoCloseable {
 
   /**
    * Returns the underlying {@link ByteBuffer}.
+   *
    * @return the {@link ByteBuffer}.
    */
   public ByteBuffer get() {

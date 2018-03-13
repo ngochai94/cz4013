@@ -40,6 +40,6 @@ public class Response<RespBody> {
     if (!(o instanceof Response)) return false;
     Response<?> response = (Response<?>) o;
     return Objects.equals(header, response.header) &&
-             Objects.equals(body, response.body);
+      Objects.equals(body, response.body);
   }
 }

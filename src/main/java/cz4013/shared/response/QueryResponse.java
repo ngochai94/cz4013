@@ -23,12 +23,12 @@ public class QueryResponse {
     this.errorMessage = errorMessage;
   }
 
+  public static QueryResponse failed(String errorMessage) {
+    return new QueryResponse("", Currency.USD, 0.0, false, errorMessage);
+  }
+
   @Override
   public String toString() {
     return "QueryResponse(" + name + ", " + currency + ", " + balance + ", " + success + ", " + errorMessage + ")";
-  }
-
-  public static QueryResponse failed(String errorMessage) {
-    return new QueryResponse("", Currency.USD, 0.0, false, errorMessage);
   }
 }

@@ -14,10 +14,10 @@ public class AccountDetail {
   /**
    * Constructs an entry for a bank account in DB.
    *
-   * @param name name of the account owner
+   * @param name     name of the account owner
    * @param password password of this account
    * @param currency currency used by this account
-   * @param amount amount of money on this account
+   * @param amount   amount of money on this account
    */
   public AccountDetail(String name, String password, Currency currency, double amount) {
     this.name = name;

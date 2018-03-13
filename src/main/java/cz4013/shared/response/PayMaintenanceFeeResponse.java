@@ -21,12 +21,12 @@ public class PayMaintenanceFeeResponse {
     this.errorMessage = errorMessage;
   }
 
+  public static PayMaintenanceFeeResponse failed(String errorMessage) {
+    return new PayMaintenanceFeeResponse(Currency.USD, 0.0, false, errorMessage);
+  }
+
   @Override
   public String toString() {
     return "PayMaintenanceFeeResponse(" + balance + ", " + success + ", " + errorMessage + ")";
-  }
-
-  public static PayMaintenanceFeeResponse failed(String errorMessage) {
-    return new PayMaintenanceFeeResponse(Currency.USD, 0.0, false, errorMessage);
   }
 }

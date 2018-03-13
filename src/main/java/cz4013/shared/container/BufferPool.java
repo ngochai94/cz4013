@@ -14,7 +14,7 @@ public class BufferPool {
    * Constructs a new pool with the given capacity.
    *
    * @param bufferSize the size of each buffer
-   * @param poolSize the capacity of the pool
+   * @param poolSize   the capacity of the pool
    */
   public BufferPool(int bufferSize, int poolSize) {
     for (int i = 0; i < poolSize; ++i) {
@@ -24,7 +24,7 @@ public class BufferPool {
 
   /**
    * Takes a buffer from the pool. Blocks if the pool is empty.
-   *
+   * <p>
    * The returned buffer must be released either explicit by calling {@link PooledByteBuffer#close()}
    * or implicitly by using the try-with-resource-idiom:
    * <pre>{@code

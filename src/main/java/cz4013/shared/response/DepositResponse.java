@@ -21,12 +21,12 @@ public class DepositResponse {
     this.errorMessage = errorMessage;
   }
 
+  public static DepositResponse failed(String errorMessage) {
+    return new DepositResponse(Currency.USD, 0, false, errorMessage);
+  }
+
   @Override
   public String toString() {
     return "DepositResponse(" + currency + ", " + balance + ", " + success + ", " + errorMessage + ")";
-  }
-
-  public static DepositResponse failed(String errorMessage) {
-    return new DepositResponse(Currency.USD, 0, false, errorMessage);
   }
 }

@@ -22,7 +22,7 @@ public class Transport {
    * used to read datagrams.
    *
    * @param socket the socket
-   * @param pool the pool
+   * @param pool   the pool
    */
   public Transport(DatagramSocket socket, BufferPool pool) {
     this.socket = socket;
@@ -51,8 +51,8 @@ public class Transport {
    * Serializes and sends a UDP datagram over the socket.
    *
    * @param dest the destination
-   * @param obj the datagram payload
-   * @param <T> type of payload
+   * @param obj  the datagram payload
+   * @param <T>  type of payload
    */
   public <T> void send(SocketAddress dest, T obj) {
     try (PooledByteBuffer buf = pool.take()) {

@@ -15,6 +15,7 @@ public class Database {
   /**
    * Stores a bank account record.
    * If the accountNumber already exists, it will be overwritten.
+   *
    * @param accountNumber number of the account
    * @param accountDetail detail of the account
    */

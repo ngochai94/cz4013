@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * A fixed-size, key-value based least-recently used cached.
- *
+ * <p>
  * When the cache is full, the last key to be accessed (read/write) will be removed.
  *
  * @param <K> the key type
@@ -19,6 +19,7 @@ public class LruCache<K, V> {
 
   /**
    * Constructs a new cache with the given capacity.
+   *
    * @param capacity the capacity.
    */
   public LruCache(int capacity) {
@@ -43,7 +44,7 @@ public class LruCache<K, V> {
   /**
    * Adds or replaces a {@code (key, value)} pair and promotes the given key.
    *
-   * @param key the key
+   * @param key   the key
    * @param value the value
    */
   public void put(K key, V value) {
