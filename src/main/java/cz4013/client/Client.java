@@ -62,6 +62,7 @@ public class Client {
         }
       } catch (RuntimeException e) {
         if (e.getCause() instanceof SocketTimeoutException) {
+          System.out.println("Socket timeout, retrying...");
           continue;
         }
 

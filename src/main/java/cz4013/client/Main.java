@@ -26,6 +26,16 @@ public class Main {
       new InetSocketAddress(serverHost, serverPort), maxAttempts));
 
     boolean shouldStop = false;
+    System.out.print("----------------------------------------------------------------\n" +
+      "Please choose a service by typing [1-5]:\n" +
+      "1: Open a new bank account\n" +
+      "2: Close a bank account\n" +
+      "3: Deposit to a bank account\n" +
+      "4: Withdraw from a bank account\n" +
+      "5: Monitor update from other accounts\n" +
+      "6: Query information from a bank account\n" +
+      "7: Pay maintenance fee from a bank account\n" +
+      "0: Stop the client\n");
     while (!shouldStop) {
       int userChoice = askUserChoice();
       try {
@@ -67,15 +77,6 @@ public class Main {
 
   private static int askUserChoice() {
     System.out.print("\n----------------------------------------------------------------\n" +
-      "Please choose a service by typing [1-5]:\n" +
-      "1: Open a new bank account\n" +
-      "2: Close a bank account\n" +
-      "3: Deposit to a bank account\n" +
-      "4: Withdraw from a bank account\n" +
-      "5: Monitor update from other accounts\n" +
-      "6: Query information from a bank account\n" +
-      "7: Pay maintenance fee from a bank account\n" +
-      "0: Stop the client\n" +
       "Your choice = ");
     int choice = Util.safeReadInt();
     if (choice < 0 || choice > 7) {
