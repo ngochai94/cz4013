@@ -38,12 +38,12 @@ public class Main {
     for (; ; ) {
       try (RawMessage req = server.recv()) {
         if (Math.random() < packetLossRate) {
-          System.out.printf("Dropped a request from %s.", req.remote);
+          System.out.printf("Dropped a request from %s.\n", req.remote);
           continue;
         }
         Response<?> resp = r.route(req);
         if (Math.random() < packetLossRate) {
-          System.out.printf("Dropped a response to %s.", req.remote);
+          System.out.printf("Dropped a response to %s.\n", req.remote);
         } else {
           server.send(req.remote, resp);
         }
