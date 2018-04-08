@@ -138,6 +138,9 @@ public class BankService {
     if (accountDetail == null) {
       return QueryResponse.failed("This account number doesn't exist");
     }
+    if (!req.password.equals(accountDetail.password)) {
+      return QueryResponse.failed("Wrong password");
+    }
     broadcast(String.format("Someone queries account %d", req.accountNumber));
     return new QueryResponse(accountDetail.name, accountDetail.currency, accountDetail.amount, true, "");
   }
