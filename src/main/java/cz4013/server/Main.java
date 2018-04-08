@@ -17,7 +17,7 @@ import java.util.Map;
 public class Main {
   public static void main(String[] args) throws SocketException {
     Map<String, String> env = System.getenv();
-    String host = env.getOrDefault("HOST", "127.0.0.1");
+    String host = env.getOrDefault("HOST", "0.0.0.0");
     int port = Integer.parseInt(env.getOrDefault("PORT", "12740"));
     boolean atMostOnce = Integer.parseInt(env.getOrDefault("AT_MOST_ONCE", "0")) != 0;
     double packetLossRate = Double.parseDouble(env.getOrDefault("PACKET_LOSS_RATE", "0.0"));
