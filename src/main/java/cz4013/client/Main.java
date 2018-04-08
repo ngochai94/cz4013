@@ -84,7 +84,7 @@ public class Main {
     System.out.print("\n----------------------------------------------------------------\n" +
       "Your choice = ");
     int choice = Util.safeReadInt();
-    if (choice < 0 || choice > 7) {
+    if (choice < 0 || choice > 8) {
       System.out.println("Invalid choice!");
       return askUserChoice();
     }
