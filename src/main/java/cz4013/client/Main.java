@@ -21,7 +21,7 @@ public class Main {
     DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientHost, clientPort));
     socket.setSoTimeout((int) timeout.toMillis());
     String MANUAL = "----------------------------------------------------------------\n" +
-      "Please choose a service by typing [1-5]:\n" +
+      "Please choose a service by typing [1-8]:\n" +
       "1: Open a new bank account\n" +
       "2: Close a bank account\n" +
       "3: Deposit to a bank account\n" +
@@ -66,8 +66,11 @@ public class Main {
           case 8:
             System.out.println(MANUAL);
             break;
-          default:
+          case 0:
             shouldStop = true;
+            break;
+          default:
+            System.out.println("Invalid choice!");
             break;
         }
       } catch (NoResponseException e) {
@@ -83,11 +86,6 @@ public class Main {
   private static int askUserChoice() {
     System.out.print("\n----------------------------------------------------------------\n" +
       "Your choice = ");
-    int choice = Util.safeReadInt();
-    if (choice < 0 || choice > 8) {
-      System.out.println("Invalid choice!");
-      return askUserChoice();
-    }
-    return choice;
+    return Util.safeReadInt();
   }
 }
