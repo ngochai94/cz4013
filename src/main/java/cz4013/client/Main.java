@@ -20,13 +20,7 @@ public class Main {
     int maxAttempts = Integer.parseInt(env.getOrDefault("MAX_ATTEMPTS", "5"));
     DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientHost, clientPort));
     socket.setSoTimeout((int) timeout.toMillis());
-
-    BankClient bankClient = new BankClient(new Client(
-      new Transport(socket, new BufferPool(8192, 1024)),
-      new InetSocketAddress(serverHost, serverPort), maxAttempts));
-
-    boolean shouldStop = false;
-    System.out.print("----------------------------------------------------------------\n" +
+    String MANUAL = "----------------------------------------------------------------\n" +
       "Please choose a service by typing [1-5]:\n" +
       "1: Open a new bank account\n" +
       "2: Close a bank account\n" +
@@ -35,7 +29,15 @@ public class Main {
       "5: Monitor update from other accounts\n" +
       "6: Query information from a bank account\n" +
       "7: Pay maintenance fee from a bank account\n" +
-      "0: Stop the client\n");
+      "8: Print the manual\n" +
+      "0: Stop the client\n";
+
+    BankClient bankClient = new BankClient(new Client(
+      new Transport(socket, new BufferPool(8192, 1024)),
+      new InetSocketAddress(serverHost, serverPort), maxAttempts));
+
+    boolean shouldStop = false;
+    System.out.print(MANUAL);
     while (!shouldStop) {
       int userChoice = askUserChoice();
       try {
@@ -60,6 +62,9 @@ public class Main {
             break;
           case 7:
             bankClient.runMaintenanceService();
+            break;
+          case 8:
+            System.out.println(MANUAL);
             break;
           default:
             shouldStop = true;
