@@ -123,6 +123,7 @@ public class BankService {
   public MonitorStatusResponse processMonitor(MonitorRequest req, SocketAddress remote) {
     long interval = req.interval;
     listeners.put(remote, Instant.now().plusSeconds(interval));
+    System.out.printf("User at %s starts to monitor for %d seconds\n", remote, interval);
     return new MonitorStatusResponse(true);
   }
 
@@ -168,6 +169,7 @@ public class BankService {
 
   private void broadcast(String info) {
     purgeListeners();
+    System.out.println(info);
     Response<MonitorUpdateResponse> resp = new Response<>(
       new ResponseHeader(UUID.randomUUID(), Status.OK),
       Optional.of(new MonitorUpdateResponse(info))

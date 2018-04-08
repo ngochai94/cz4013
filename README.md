@@ -2,7 +2,7 @@
 - Server `TERM=dumb HOST=<host> PORT=<port> AT_MOST_ONCE=<0|1> PACKET_LOSS_RATE=<0.0-1.0> ./gradlew -q server`.
   Default config:
   ```
-  HOST=127.0.0.1 
+  HOST=0.0.0.0
   PORT=12740 
   AT_MOST_ONCE=0
   PACKET_LOSS_RATE=0.0
@@ -10,7 +10,7 @@
 - Client `TERM=dumb CLIENT_HOST=<host> CLIENT_PORT=<port> SERVER_HOST=<host> SERVER_PORT<port> TIMEOUT_SEC=<seconds> MAX_ATTEMPTS=<attempts>  ./gradlew -q client`.
   Default config:
   ```
-  CLIENT_HOST=127.0.0.1
+  CLIENT_HOST=0.0.0.0
   CLIENT_PORT=12741
   SERVER_HOST=127.0.0.1
   SERVER_PORT=12740

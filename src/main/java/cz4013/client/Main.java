@@ -12,7 +12,7 @@ import java.util.Map;
 public class Main {
   public static void main(String[] args) throws SocketException {
     Map<String, String> env = System.getenv();
-    String clientHost = env.getOrDefault("CLIENT_HOST", "127.0.0.1");
+    String clientHost = env.getOrDefault("CLIENT_HOST", "0.0.0.0");
     String serverHost = env.getOrDefault("SERVER_HOST", "127.0.0.1");
     int clientPort = Integer.parseInt(env.getOrDefault("CLIENT_PORT", "12741"));
     int serverPort = Integer.parseInt(env.getOrDefault("SERVER_PORT", "12740"));
